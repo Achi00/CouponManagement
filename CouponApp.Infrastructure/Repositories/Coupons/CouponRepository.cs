@@ -2,6 +2,8 @@
 using CouponApp.Application.Interfaces.Repositories;
 using CouponApp.Domain.Entity;
 using CouponApp.Persistence.Contexts;
+using CouponApp.Application.DTOs.Coupons;
+using Mapster;
 
 namespace CouponApp.Infrastructure.Repositories.Coupons
 {
@@ -38,6 +40,10 @@ namespace CouponApp.Infrastructure.Repositories.Coupons
         public async Task<Coupon?> GetForUpdateAsync(Guid id, CancellationToken cancellationToken)
         {
             return await _context.Coupons.FirstOrDefaultAsync(c => c.Id == id, cancellationToken).ConfigureAwait(false);
+        }
+        public async Task<List<CouponResponse>> GetByUserIdAsync(Guid userId, CancellationToken cancellationToken)
+        {
+            return await _context.Coupons.AsNoTracking().Where(x => x.UserId == userId).ProjectToType<CouponResponse>().ToListAsync(cancellationToken);
         }
     }
 }

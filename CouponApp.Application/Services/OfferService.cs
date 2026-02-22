@@ -16,19 +16,19 @@ namespace CouponApp.Application.Services
         private readonly IOfferRepository _offerRepository;
         private readonly IMerchantRepository _merchantRepository;
         private readonly IUnitOfWork _unitOfWork;
-        private readonly ICurrentUserService _currentUser;
+        private readonly IAuthorizationService _authorization;
 
-        public OfferService(IOfferRepository offerRepository, IUnitOfWork unitOfWork, ICurrentUserService currentUser, IMerchantRepository merchantRepository)
+        public OfferService(IOfferRepository offerRepository, IUnitOfWork unitOfWork, IAuthorizationService authorization, IMerchantRepository merchantRepository)
         {
             _offerRepository = offerRepository;
             _unitOfWork = unitOfWork;
-            _currentUser = currentUser;
             _merchantRepository = merchantRepository;
+            _authorization = authorization;
         }
 
         public async Task<OfferResponse> GetByIdAsync(Guid id, CancellationToken cancellationToken)
         {
-            AuthHelper.EnsureAuthenticated(_currentUser);
+            _authorization.EnsureAuthenticated();
 
             var offer = await _offerRepository.GetByIdAsync(id, cancellationToken);
             if (offer == null)
@@ -41,16 +41,14 @@ namespace CouponApp.Application.Services
 
         public async Task<List<OfferResponse>> GetByMerchantAsync(Guid merchantId, CancellationToken cancellationToken)
         {
-            AuthHelper.EnsureAuthenticated(_currentUser);
-            AuthHelper.EnsureRole(UserRole.Merchant, _currentUser);
+            _authorization.EnsureRole(UserRole.Merchant);
 
             return await _offerRepository.GetByMerchantIdAsync(merchantId, cancellationToken);
         }
 
         public async Task CreateAsync(Guid merchantId, CreateOfferRequest dto, CancellationToken cancellationToken)
         {
-            AuthHelper.EnsureAuthenticated(_currentUser);
-            AuthHelper.EnsureRole(UserRole.Merchant, _currentUser);
+            _authorization.EnsureRole(UserRole.Merchant);
 
             var merchant = await _merchantRepository.GetByIdAsync(merchantId, cancellationToken);
             if (merchant == null)
@@ -69,8 +67,7 @@ namespace CouponApp.Application.Services
 
         public async Task UpdateAsync(Guid merchantId, Guid offerId, UpdateOfferRequest dto, CancellationToken cancellationToken)
         {
-            AuthHelper.EnsureAuthenticated(_currentUser);
-            AuthHelper.EnsureRole(UserRole.Merchant, _currentUser);
+            _authorization.EnsureRole(UserRole.Merchant);
 
             // check if merchant exists
             var merchant = await _merchantRepository.GetByIdAsync(merchantId, cancellationToken);
@@ -98,8 +95,7 @@ namespace CouponApp.Application.Services
 
         public async Task DeleteAsync(Guid merchantId, Guid offerId, CancellationToken cancellationToken)
         {
-            AuthHelper.EnsureAuthenticated(_currentUser);
-            AuthHelper.EnsureRole(UserRole.Merchant, _currentUser);
+            _authorization.EnsureRole(UserRole.Merchant);
 
             // check if merchant exists
             var merchant = await _merchantRepository.GetByIdAsync(merchantId, cancellationToken);
@@ -128,7 +124,8 @@ namespace CouponApp.Application.Services
         // for customer browsing
         public async Task<OfferDetailsResponse> GetDetailsAsync(Guid offerId, CancellationToken cancellationToken)
         {
-            AuthHelper.EnsureAuthenticated(_currentUser);
+            _authorization.EnsureAuthenticated();
+
             var offer = await _offerRepository.GetByIdAsync(offerId, cancellationToken);
             if (offer == null)
             {
@@ -141,16 +138,14 @@ namespace CouponApp.Application.Services
         // for admin
         public async Task<List<OfferResponse>> GetPendingAsync(CancellationToken cancellationToken)
         {
-            AuthHelper.EnsureAuthenticated(_currentUser);
-            AuthHelper.EnsureRole(UserRole.Admin, _currentUser);
-            
+            _authorization.EnsureRole(UserRole.Admin);
+
             return await _offerRepository.GetPendingAsync(cancellationToken);
         }
 
         public async Task ApproveAsync(Guid offerId, CancellationToken cancellationToken)
         {
-            AuthHelper.EnsureAuthenticated(_currentUser);
-            AuthHelper.EnsureRole(UserRole.Admin, _currentUser);
+            _authorization.EnsureRole(UserRole.Admin);
 
             // get offew with tracking
             var offer = await _offerRepository.GetForUpdateAsync(offerId, cancellationToken);
@@ -167,8 +162,7 @@ namespace CouponApp.Application.Services
 
         public async Task<RejectOfferResponse> RejectAsync(Guid offerId, string? reason, CancellationToken cancellationToken)
         {
-            AuthHelper.EnsureAuthenticated(_currentUser);
-            AuthHelper.EnsureRole(UserRole.Admin, _currentUser);
+            _authorization.EnsureRole(UserRole.Admin);
 
             // get offew with tracking
             var offer = await _offerRepository.GetForUpdateAsync(offerId, cancellationToken);

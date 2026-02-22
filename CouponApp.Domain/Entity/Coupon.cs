@@ -17,5 +17,20 @@ namespace CouponApp.Domain.Entity
 
         public Offer Offer { get; set; }
         public User User { get; set; }
+
+        private Coupon() { }
+
+        public static Coupon Create(Guid userId, Guid offerId, string code)
+        {
+            return new Coupon
+            {
+                Id = Guid.NewGuid(),
+                UserId = userId,
+                OfferId = offerId,
+                Code = code,
+                Status = CouponStatus.Active,
+                PurchasedAt = DateTime.UtcNow
+            };
+        }
     }
 }

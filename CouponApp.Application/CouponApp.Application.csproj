@@ -16,4 +16,8 @@
     <ProjectReference Include="..\CouponApp.Domain\CouponApp.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Helpers\" />
+  </ItemGroup>
+
 </Project>
