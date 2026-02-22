@@ -1,0 +1,19 @@
+﻿@using CouponApp.Web.Models.Shared
+@model OperationResultViewModel
+
+<div class="text-center mt-5">
+    <h2 class="@(Model.Success ? "text-success" : "text-danger")">
+        @Model.Title
+    </h2>
+
+    <p>@Model.Message</p>
+
+    @if (!string.IsNullOrEmpty(Model.RedirectAction))
+    {
+        <a asp-action="@Model.RedirectAction"
+           asp-controller="@Model.RedirectController"
+           class="btn btn-primary mt-3">
+            @Model.RedirectText
+        </a>
+    }
+</div>

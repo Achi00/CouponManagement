@@ -1,0 +1,12 @@
+﻿using Microsoft.EntityFrameworkCore.Storage;
+
+namespace CouponApp.Application.Interfaces
+{
+    public interface IUnitOfWork
+    {
+        Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken ct);
+        Task CommitTransactionAsync(CancellationToken ct);
+        Task RollbackTransactionAsync(CancellationToken ct);
+        Task<int> SaveChangesAsync(CancellationToken ct);
+    }
+}

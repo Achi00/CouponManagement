@@ -1,0 +1,23 @@
+﻿@using CouponApp.Application.DTOs.Product
+
+@model List<DisplayProductViewModel>
+
+<h2>Products</h2>
+
+@foreach (var product in Model)
+{
+    <tr>
+        <td>@product.Id</td>
+        <td>@product.Name</td>
+        <td>@product.Price</td>
+        <td>@product.IsLowStock</td>
+        <td>@product.StockStatus</td>
+        <td>@product.StockQuantity</td>
+        <form 
+            asp-action="Delete" 
+            asp-route-id="@product.Id"
+            method="post">
+            <button type="submit">Delete</button>
+        </form>
+    </tr>
+}

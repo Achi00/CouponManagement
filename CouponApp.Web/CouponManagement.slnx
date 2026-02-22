@@ -1,0 +1,15 @@
+<Solution>
+  <Folder Name="/Core/">
+    <Project Path="../CouponApp.Application/CouponApp.Application.csproj" />
+    <Project Path="../CouponApp.Domain/CouponApp.Domain.csproj" />
+  </Folder>
+
+  <Folder Name="/Infrastructure/">
+    <Project Path="../CouponApp.Infrastructure/CouponApp.Infrastructure.csproj" />
+    <Project Path="../CouponApp.Persistence/CouponApp.Persistence.csproj" />
+  </Folder>
+
+  <Folder Name="/Presentation/">
+    <Project Path="CouponApp.Web.csproj" />
+  </Folder>
+</Solution>
