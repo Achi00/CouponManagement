@@ -16,10 +16,14 @@ namespace CouponApp.Persistence.Configurations
                 .IsRequired()
                 .HasMaxLength(200);
 
-            builder.HasOne(m => m.User)
-                .WithOne(u => u.Merchant)
-                .HasForeignKey<Merchant>(m => m.UserId)
-                .OnDelete(DeleteBehavior.Restrict);
+            builder.Property(m => m.Description)
+                .IsRequired()
+                .HasMaxLength(1000);
+
+            builder.HasMany(m => m.Offers)
+               .WithOne(o => o.Merchant)
+               .HasForeignKey(o => o.MerchantId)
+               .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasIndex(m => m.UserId)
                 .IsUnique();

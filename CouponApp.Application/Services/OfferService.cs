@@ -1,7 +1,6 @@
 ﻿using Mapster;
 using CouponApp.Application.DTOs.Offers;
 using CouponApp.Application.Exceptions;
-using CouponApp.Application.Helpers;
 using CouponApp.Application.Interfaces;
 using CouponApp.Application.Interfaces.Repositories;
 using CouponApp.Application.Interfaces.Sercives;
@@ -33,7 +32,7 @@ namespace CouponApp.Application.Services
             var offer = await _offerRepository.GetByIdAsync(id, cancellationToken);
             if (offer == null)
             {
-                throw new NotFoundException("Offer was not found");
+                throw new NotFoundException("Offer not found");
             }
 
             return offer.Adapt<OfferResponse>();
@@ -53,7 +52,7 @@ namespace CouponApp.Application.Services
             var merchant = await _merchantRepository.GetByIdAsync(merchantId, cancellationToken);
             if (merchant == null)
             {
-                throw new NotFoundException("Merchant was not found");
+                throw new NotFoundException("Merchant not found");
             }
 
             var offer = dto.Adapt<Offer>();
@@ -73,13 +72,13 @@ namespace CouponApp.Application.Services
             var merchant = await _merchantRepository.GetByIdAsync(merchantId, cancellationToken);
             if (merchant == null)
             {
-                throw new NotFoundException("Merchant was not found");
+                throw new NotFoundException("Merchant not found");
             }
             // check if offer exists
             var offer = await _offerRepository.GetByIdAsync(offerId, cancellationToken);
             if (offer == null)
             {
-                throw new NotFoundException("Offer was not found");
+                throw new NotFoundException("Offer not found");
             }
 
             // check if merchant owns offer
@@ -101,13 +100,13 @@ namespace CouponApp.Application.Services
             var merchant = await _merchantRepository.GetByIdAsync(merchantId, cancellationToken);
             if (merchant == null)
             {
-                throw new NotFoundException("Merchant was not found");
+                throw new NotFoundException("Merchant not found");
             }
             // check if offer exists
             var offer = await _offerRepository.GetForUpdateAsync(offerId, cancellationToken);
             if (offer == null)
             {
-                throw new NotFoundException("Offer was not found");
+                throw new NotFoundException("Offer not found");
             }
 
             // check if merchant owns offer
@@ -129,7 +128,7 @@ namespace CouponApp.Application.Services
             var offer = await _offerRepository.GetByIdAsync(offerId, cancellationToken);
             if (offer == null)
             {
-                throw new NotFoundException("Offer was not found");
+                throw new NotFoundException("Offer not found");
             }
 
             return offer.Adapt<OfferDetailsResponse>();
@@ -152,7 +151,7 @@ namespace CouponApp.Application.Services
 
             if (offer == null)
             {
-                throw new NotFoundException("Offer was not found");
+                throw new NotFoundException("Offer not found");
             }
 
             offer.Status = OfferStatus.Approved;

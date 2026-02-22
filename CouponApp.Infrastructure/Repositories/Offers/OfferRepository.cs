@@ -43,7 +43,8 @@ namespace CouponApp.Infrastructure.Repositories.Offers
                 .AsNoTracking()
                 .Include(o => o.Category)
                 .Include(o => o.Merchant)
-                .FirstOrDefaultAsync(o => o.Id == id, ct);
+                .FirstOrDefaultAsync(o => o.Id == id, ct)
+                .ConfigureAwait(false);
         }
 
         public async Task<List<OfferResponse>> GetByMerchantIdAsync(Guid merchantId, CancellationToken cancellationToken)
@@ -54,6 +55,21 @@ namespace CouponApp.Infrastructure.Repositories.Offers
                 .ProjectToType<OfferResponse>()
                 .ToListAsync(cancellationToken)
                 .ConfigureAwait(false);
+        }
+
+        public async Task<int> GetTotalCountByMerchantIdAsync(Guid merchantId, CancellationToken cancellationToken)
+        {
+            return await _context.Offers.CountAsync(x => x.MerchantId == merchantId, cancellationToken).ConfigureAwait(false);
+        }
+
+        public async Task<int> GetActiveCountByMerchantIdAsync(Guid merchantId, CancellationToken cancellationToken)
+        {
+            return await _context.Offers.CountAsync(x => x.MerchantId == merchantId && x.Status == OfferStatus.Approved, cancellationToken).ConfigureAwait(false);
+        }
+
+        public async Task<int> GetExpiredCountByMerchantIdAsync(Guid merchantId, CancellationToken cancellationToken)
+        {
+            return await _context.Offers.CountAsync(x => x.MerchantId == merchantId && x.Status == OfferStatus.Expired, cancellationToken).ConfigureAwait(false);
         }
 
         public async Task<Offer?> GetForUpdateAsync(Guid id, CancellationToken cancellationToken)
@@ -70,5 +86,7 @@ namespace CouponApp.Infrastructure.Repositories.Offers
                 .ToListAsync(cancellationToken)
                 .ConfigureAwait(false);
         }
+
+        
     }
 }

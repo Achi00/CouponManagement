@@ -4,25 +4,15 @@ namespace CouponApp.Application.Interfaces.Sercives
 {
     public interface IOfferService
     {
-        // Public browsing
-        Task<List<OfferResponse>> GetApprovedAsync(CancellationToken cancellationToken);
-        // returns full info, remaining coupons, deadlines, and whether sold out
-        Task<OfferDetailsResponse> GetDetailAsync(Guid offerId, CancellationToken cancellationToken);
-
-        // Merchant CRUD
-        Task<Guid> CreateAsync(Guid userId, CreateOfferRequest request, CancellationToken cancellationToken);
-        // sets status to Pending automatically
-
-        // checks if still within merchant edit window from SettingsService, throws if expired
-        Task UpdateAsync(Guid userId, Guid offerId, UpdateOfferRequest request, CancellationToken cancellationToken);
-
-        Task DeleteAsync(Guid userId, Guid offerId, CancellationToken cancellationToken);
-
-        Task<List<OfferResponse>> GetByMerchantAsync(Guid userId, CancellationToken cancellationToken);
-
-        // Admin moderation
-        Task<List<OfferResponse>> GetPendingAsync(CancellationToken cancellationToken);
         Task ApproveAsync(Guid offerId, CancellationToken cancellationToken);
-        Task RejectAsync(Guid offerId, string reason, CancellationToken cancellationToken);
+        Task CreateAsync(Guid merchantId, CreateOfferRequest dto, CancellationToken cancellationToken);
+        Task DeleteAsync(Guid merchantId, Guid offerId, CancellationToken cancellationToken);
+        Task<OfferResponse> GetByIdAsync(Guid id, CancellationToken cancellationToken);
+        Task<List<OfferResponse>> GetByMerchantAsync(Guid merchantId, CancellationToken cancellationToken);
+        Task<OfferDetailsResponse> GetDetailsAsync(Guid offerId, CancellationToken cancellationToken);
+        // admin
+        Task<List<OfferResponse>> GetPendingAsync(CancellationToken cancellationToken);
+        Task<RejectOfferResponse> RejectAsync(Guid offerId, string? reason, CancellationToken cancellationToken);
+        Task UpdateAsync(Guid merchantId, Guid offerId, UpdateOfferRequest dto, CancellationToken cancellationToken);
     }
 }

@@ -45,5 +45,12 @@ namespace CouponApp.Infrastructure.Repositories.Merchants
                 .FirstOrDefaultAsync(x => x.Id == id, cancellationToken)
                 .ConfigureAwait(false);
         }
+
+        public async Task<Merchant?> GetForUpdateByUserIdAsync(Guid userId, CancellationToken cancellationToken)
+        {
+            return await _context.Merchants
+                    .FirstOrDefaultAsync(m => m.UserId == userId, cancellationToken)
+                    .ConfigureAwait(false);
+        }
     }
 }

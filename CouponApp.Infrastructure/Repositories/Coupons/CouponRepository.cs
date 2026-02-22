@@ -1,9 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using CouponApp.Application.DTOs.Coupons;
+using CouponApp.Application.DTOs.Merchant;
 using CouponApp.Application.Interfaces.Repositories;
 using CouponApp.Domain.Entity;
+using CouponApp.Domain.Enums;
 using CouponApp.Persistence.Contexts;
-using CouponApp.Application.DTOs.Coupons;
 using Mapster;
+using Microsoft.EntityFrameworkCore;
 
 namespace CouponApp.Infrastructure.Repositories.Coupons
 {
@@ -27,7 +29,10 @@ namespace CouponApp.Infrastructure.Repositories.Coupons
 
         public async Task<Coupon?> GetByCodeAsync(string code, CancellationToken cancellationToken)
         {
-            return await _context.Coupons.AsNoTracking().FirstOrDefaultAsync(c => c.Code == code, cancellationToken).ConfigureAwait(false);
+            return await _context.Coupons
+                .AsNoTracking()
+                .FirstOrDefaultAsync(c => c.Code == code, cancellationToken)
+                .ConfigureAwait(false);
         }
 
         public async Task<Coupon?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
@@ -35,15 +40,50 @@ namespace CouponApp.Infrastructure.Repositories.Coupons
             return await _context.Coupons
                 .AsNoTracking()
                 .Include(c => c.Offer)
-                .FirstOrDefaultAsync(c => c.Id == id, cancellationToken);
+                .FirstOrDefaultAsync(c => c.Id == id, cancellationToken)
+                .ConfigureAwait(false);
         }
         public async Task<Coupon?> GetForUpdateAsync(Guid id, CancellationToken cancellationToken)
         {
-            return await _context.Coupons.FirstOrDefaultAsync(c => c.Id == id, cancellationToken).ConfigureAwait(false);
+            return await _context.Coupons
+                .FirstOrDefaultAsync(c => c.Id == id, cancellationToken)
+                .ConfigureAwait(false);
         }
         public async Task<List<CouponResponse>> GetByUserIdAsync(Guid userId, CancellationToken cancellationToken)
         {
-            return await _context.Coupons.AsNoTracking().Where(x => x.UserId == userId).ProjectToType<CouponResponse>().ToListAsync(cancellationToken);
+            return await _context.Coupons
+                .AsNoTracking()
+                .Where(x => x.UserId == userId)
+                .ProjectToType<CouponResponse>()
+                .ToListAsync(cancellationToken)
+                .ConfigureAwait(false);
+        }
+
+        public async Task<List<MerchantSaleResponse>> GetSalesByMerchantIdAsync(Guid merchantId, CancellationToken cancellationToken)
+        {
+            return await _context.Coupons
+                .AsNoTracking()
+                .Where(c => c.Offer.MerchantId == merchantId)
+                .ProjectToType<MerchantSaleResponse>()
+                .ToListAsync(cancellationToken)
+                .ConfigureAwait(false);
+        }
+
+        public async Task<int> GetSoldCountByMerchantIdAsync(Guid merchantId, CancellationToken cancellationToken)
+        {
+            return await _context.Coupons
+                .AsNoTracking()
+                .CountAsync(c => c.Offer.MerchantId == merchantId, cancellationToken)
+                .ConfigureAwait(false);
+        }
+
+        public async Task<decimal> GetTotalRevenueByMerchantIdAsync(Guid merchantId, CancellationToken cancellationToken)
+        {
+            return await _context.Coupons
+                .AsNoTracking()
+                .Where(c => c.Offer.MerchantId == merchantId)
+                .SumAsync(c => c.Offer.DiscountedPrice, cancellationToken)
+                .ConfigureAwait(false);
         }
     }
 }

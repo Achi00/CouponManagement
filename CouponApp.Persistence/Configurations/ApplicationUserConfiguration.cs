@@ -1,6 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
+﻿using CouponApp.Domain.Enums;
 using CouponApp.Persistence.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace CouponApp.Persistence.Configurations
 {
@@ -9,9 +10,14 @@ namespace CouponApp.Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<ApplicationUser> builder)
         {
-            builder.HasIndex(x => x.DomainUserId)
-                   .IsUnique()
-                   .HasFilter("[DomainUserId] IS NOT NULL");
+            builder.Property(u => u.Role)
+                .IsRequired()
+                .HasDefaultValue(UserRole.Customer)
+                .HasConversion<int>();
+
+            builder.Property(u => u.IsBlocked)
+                .IsRequired()
+                .HasDefaultValue(false);
         }
     }
 

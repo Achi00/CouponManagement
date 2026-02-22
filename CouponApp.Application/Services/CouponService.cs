@@ -77,7 +77,7 @@ namespace CouponApp.Application.Services
                 var offer = await _offerRepository.GetForUpdateAsync(offerId, cancellationToken);
                 if (offer == null)
                 {
-                    throw new NotFoundException("Offer was not found");
+                    throw new NotFoundException("Offer not found");
                 }
                 if (offer.RemainingCoupons <= 0)
                 {
@@ -134,7 +134,7 @@ namespace CouponApp.Application.Services
                 var reservation = await _reservationRepository.GetForUpdateAsync(reservationId, cancellationToken);
                 if (reservation == null)
                 {
-                    throw new NotFoundException("Reservation was not found");
+                    throw new NotFoundException("Reservation not found");
                 }
                 if (reservation.UserId != userId)
                 {

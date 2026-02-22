@@ -29,7 +29,21 @@ namespace CouponApp.Persistence.Configurations
 
             builder.HasIndex(u => u.Username)
                 .IsUnique();
+
+            builder.HasOne(u => u.Merchant)
+               .WithOne(m => m.User)
+               .HasForeignKey<Merchant>(m => m.UserId)
+               .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasMany(u => u.Coupons)
+                   .WithOne(c => c.User)
+                   .HasForeignKey(c => c.UserId)
+                   .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasMany(u => u.Reservations)
+                   .WithOne(r => r.User)
+                   .HasForeignKey(r => r.UserId)
+                   .OnDelete(DeleteBehavior.Restrict);
         }
     }
-
 }

@@ -2,12 +2,10 @@
 {
     public class MerchantDashboardResponse
     {
-        public int ActiveOffers { get; set; }
-
-        public int PendingOffers { get; set; }
-
-        public int ExpiredOffers { get; set; }
-
+        public int TotalOffers { get; set; }
         public int TotalCouponsSold { get; set; }
+        public decimal TotalRevenue { get; set; }
+        public int ActiveOffers { get; set; }
+        public List<MerchantSaleResponse> RecentSales { get; set; }
     }
 }
