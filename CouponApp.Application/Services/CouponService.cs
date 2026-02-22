@@ -43,7 +43,7 @@ namespace CouponApp.Application.Services
 
             if (string.IsNullOrWhiteSpace(code))
             {
-                throw new ArgumentNullException("Invalid Code to search coupon");
+                throw new BusinessException("Invalid Code to search coupon");
             }
 
             var coupon = await _couponRepository.GetByCodeAsync(code, cancellationToken);
@@ -69,16 +69,12 @@ namespace CouponApp.Application.Services
         public async Task<CouponResponse> PurchaseAsync(Guid offerId, CancellationToken cancellationToken)
         {
             _authorization.EnsureAuthenticated();
-
-            // get current user id
             var userId = _currentUser.UserId!.Value;
 
             await using var transaction = await _unitOfWork.BeginTransactionAsync(cancellationToken);
-
             try
             {
                 var offer = await _offerRepository.GetForUpdateAsync(offerId, cancellationToken);
-
                 if (offer == null)
                 {
                     throw new NotFoundException("Offer was not found");
@@ -88,17 +84,30 @@ namespace CouponApp.Application.Services
                     throw new BusinessException("No coupons available");
                 }
 
-                // check if user have active reservation for this offer
                 var activeReservations = await _reservationRepository.GetActiveByUserIdAsync(userId, cancellationToken);
-                var existingReservarion = activeReservations.FirstOrDefault(r => r.OfferId == offerId);
-                if (existingReservarion != null)
+                var existingReservation = activeReservations.FirstOrDefault(r => r.OfferId == offerId);
+
+                Coupon coupon;
+
+                if (existingReservation != null)
                 {
-                    return await PurchaseFromReservationAsync(existingReservarion.Id, cancellationToken);
+                    // handle reservation path inside same transaction
+                    if (existingReservation.ExpiresAt < DateTime.UtcNow)
+                    {
+                        throw new BusinessException("Reservation has expired");
+                    }
+
+                    coupon = Coupon.Create(userId, existingReservation.OfferId, _couponCodeGenerator.Generate());
+                    _reservationRepository.Delete(existingReservation);
+                }
+                else
+                {
+                    // directly using internal PurchaseFromReservationAsync may cause transaction issues??!!
+                    // direct purchase path
+                    offer.RemainingCoupons--;
+                    coupon = Coupon.Create(userId, offerId, _couponCodeGenerator.Generate());
                 }
 
-                offer.RemainingCoupons--;
-
-                var coupon = Coupon.Create(userId, offerId, _couponCodeGenerator.Generate());
                 _couponRepository.Add(coupon);
                 await _unitOfWork.SaveChangesAsync(cancellationToken);
                 await transaction.CommitAsync(cancellationToken);
@@ -116,32 +125,41 @@ namespace CouponApp.Application.Services
         public async Task<CouponResponse> PurchaseFromReservationAsync(Guid reservationId, CancellationToken cancellationToken)
         {
             _authorization.EnsureAuthenticated();
-
-            // get current user id
             var userId = _currentUser.UserId!.Value;
 
-            var reservation = await _reservationRepository.GetForUpdateAsync(reservationId, cancellationToken);
-            if (reservation == null)
+            await using var transaction = await _unitOfWork.BeginTransactionAsync(cancellationToken);
+
+            try
             {
-                throw new NotFoundException("Reservation was not found");
+                var reservation = await _reservationRepository.GetForUpdateAsync(reservationId, cancellationToken);
+                if (reservation == null)
+                {
+                    throw new NotFoundException("Reservation was not found");
+                }
+                if (reservation.UserId != userId)
+                {
+                    throw new ForbiddenException($"This Reservetion does not belongs to this user");
+                }
+                if (reservation.ExpiresAt < DateTime.UtcNow)
+                {
+                    throw new BusinessException("Reservation already expired");
+                }
+
+                var coupon = Coupon.Create(userId, reservation.OfferId, _couponCodeGenerator.Generate());
+
+                _couponRepository.Add(coupon);
+                _reservationRepository.Delete(reservation);
+
+                await _unitOfWork.SaveChangesAsync(cancellationToken);
+                await transaction.CommitAsync(cancellationToken);
+
+                return coupon.Adapt<CouponResponse>();
             }
-            if (reservation.UserId != userId)
+            catch (Exception)
             {
-                throw new ForbiddenException($"This Reservetion does not belongs to this user");
+                await transaction.RollbackAsync(cancellationToken);
+                throw;
             }
-            if (reservation.ExpiresAt < DateTime.UtcNow)
-            {
-                throw new BusinessException("Reservation already expired");
-            }
-
-            var coupon = Coupon.Create(userId, reservation.OfferId, _couponCodeGenerator.Generate());
-
-            _couponRepository.Add(coupon);
-            _reservationRepository.Delete(reservation);
-
-            await _unitOfWork.SaveChangesAsync(cancellationToken);
-
-            return coupon.Adapt<CouponResponse>();
         }
     }
 }
