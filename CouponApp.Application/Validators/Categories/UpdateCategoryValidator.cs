@@ -3,9 +3,9 @@ using FluentValidation;
 
 namespace CouponApp.Application.Validators.Categories
 {
-    public class CreateCategoryValidator : AbstractValidator<CreateCategoryRequest>
+    public class UpdateCategoryValidator : AbstractValidator<UpdateCategoryRequest>
     {
-        public CreateCategoryValidator()
+        public UpdateCategoryValidator()
         {
             RuleFor(x => x.Name)
                 .NotEmpty()

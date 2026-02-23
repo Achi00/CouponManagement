@@ -87,6 +87,9 @@ namespace CouponApp.Infrastructure.Repositories.Offers
                 .ConfigureAwait(false);
         }
 
-        
+        public async Task<bool> ExistsByCategoryIdAsync(Guid categoryId, CancellationToken cancellationToken)
+        {
+            return await _context.Offers.AsNoTracking().AnyAsync(o => o.CategoryId == categoryId, cancellationToken).ConfigureAwait(false);
+        }
     }
 }

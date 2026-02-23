@@ -18,6 +18,11 @@ namespace CouponApp.Persistence.Configurations
 
             builder.HasIndex(c => c.Name)
                 .IsUnique();
+
+            builder.HasMany(c => c.Offers)
+                   .WithOne(o => o.Category)
+                   .HasForeignKey(o => o.CategoryId)
+                   .OnDelete(DeleteBehavior.Restrict);
         }
     }
 

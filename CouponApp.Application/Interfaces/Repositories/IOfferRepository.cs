@@ -11,5 +11,6 @@ namespace CouponApp.Application.Interfaces.Repositories
         Task<int> GetActiveCountByMerchantIdAsync(Guid merchantId, CancellationToken cancellationToken);
         Task<int> GetTotalCountByMerchantIdAsync(Guid merchantId, CancellationToken cancellationToken);
         Task<int> GetExpiredCountByMerchantIdAsync(Guid merchantId, CancellationToken cancellationToken);
+        Task<bool> ExistsByCategoryIdAsync(Guid categoryId, CancellationToken cancellationToken);
     }
 }
