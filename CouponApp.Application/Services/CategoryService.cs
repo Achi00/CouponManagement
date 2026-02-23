@@ -33,7 +33,7 @@ namespace CouponApp.Application.Services
 
             var existingCategory = await _categoryRepository.GetByName(category.Name, cancellationToken);
 
-            if (existingCategory == null)
+            if (existingCategory != null)
             {
                 throw new BusinessException("Category already exists");
             }
