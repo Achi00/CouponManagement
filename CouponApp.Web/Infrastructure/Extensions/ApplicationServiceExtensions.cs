@@ -3,6 +3,7 @@ using CouponApp.Application.Interfaces.Sercives;
 using CouponApp.Application.Interfaces.Sercives.Auth;
 using CouponApp.Application.Services;
 using CouponApp.Infrastructure.Auth;
+using CouponApp.Infrastructure.BackgroundJobs;
 using CouponApp.Persistence;
 using CouponApp.Persistence.Email;
 
@@ -16,6 +17,18 @@ namespace CouponApp.Web.Infrastructure.Extensions
             services.AddScoped<IEmailService, SmtpEmailservice>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<ICouponCodeGenerator, CouponCodeGenerator>();
+            services.AddHostedService<ExpiredReservationWorker>();
+
+            // application services
+            services.AddScoped<IMerchantService, MerchantService>();
+            services.AddScoped<IOfferService, OfferService>();
+            services.AddScoped<ICouponService, CouponService>();
+            services.AddScoped<IReservationService, ReservationService>();
+            services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<ISystemSettingsService, SystemSettingsService>();
+            services.AddScoped<IUserManagementService, UserManagementService>();
+            services.AddScoped<IUserProfileService, UserProfileService>();
+
 
             return services;
         }

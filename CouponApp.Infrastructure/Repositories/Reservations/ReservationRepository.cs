@@ -30,7 +30,8 @@ namespace CouponApp.Infrastructure.Repositories.Reservations
                 .AsNoTracking()
                 .Include(r => r.Offer)
                 .Where(x => x.UserId == userId && x.Status == ReservationStatus.Active)
-                .ToListAsync(cancellationToken).ConfigureAwait(false);
+                .ToListAsync(cancellationToken)
+                .ConfigureAwait(false);
         }
 
         public async Task<List<Reservation>> GetAll(CancellationToken cancellationToken)

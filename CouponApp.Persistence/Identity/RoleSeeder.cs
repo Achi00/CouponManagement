@@ -7,7 +7,7 @@ namespace CouponApp.Persistence.Identity
     {
         public static async Task SeedAsync(IServiceProvider services)
         {
-            var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+            var roleManager = services.GetRequiredService<RoleManager<IdentityRole<Guid>>>();
             var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
 
             string[] roles = { "Admin", "User" };
@@ -16,7 +16,7 @@ namespace CouponApp.Persistence.Identity
             {
                 if (!await roleManager.RoleExistsAsync(role))
                 {
-                    await roleManager.CreateAsync(new IdentityRole(role));
+                    await roleManager.CreateAsync(new IdentityRole<Guid>(role));
                 }
             }
 

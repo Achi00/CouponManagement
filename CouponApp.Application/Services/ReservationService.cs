@@ -96,8 +96,33 @@ namespace CouponApp.Application.Services
             var reservations = await _reservationRepository.GetActiveByUserIdAsync(userId, cancellationToken);
             return reservations.Adapt<List<ReservationResponse>>();
         }
-        // called by background worker, no auth check needed
+        // user manualy cansels there reservation
         public async Task CancelAsync(Guid reservationId, CancellationToken cancellationToken)
+        {
+            _authorization.EnsureRole(UserRole.Customer);
+            var userId = _currentUser.UserId!.Value;
+
+            var reservation = await _reservationRepository.GetForUpdateAsync(reservationId, cancellationToken);
+            if (reservation == null)
+            {
+                throw new NotFoundException("Reservation not found");
+            }
+            if (reservation.UserId != userId)
+            {
+                throw new BusinessException("This reservation does not belong to you");
+            }
+
+            var offer = await _offerRepository.GetForUpdateAsync(reservation.OfferId, cancellationToken);
+            if (offer != null)
+            {
+                offer.RemainingCoupons++;
+            }
+
+            _reservationRepository.Delete(reservation);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
+        }
+        // called by background worker, no auth check needed
+        public async Task CancelExpiredAsync(CancellationToken cancellationToken)
         {
             var expired = await _reservationRepository.GetExpiredActiveReservationsAsync(DateTime.UtcNow, cancellationToken);
 
@@ -112,11 +137,6 @@ namespace CouponApp.Application.Services
             }
 
             await _unitOfWork.SaveChangesAsync(cancellationToken);
-        }
-
-        public Task CancelExpiredAsync(CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
         }
     }
 }

@@ -5,6 +5,7 @@ using CouponApp.Infrastructure.Repositories.Merchants;
 using CouponApp.Infrastructure.Repositories.Offers;
 using CouponApp.Infrastructure.Repositories.Reservations;
 using CouponApp.Infrastructure.Repositories.SystemSettings;
+using CouponApp.Infrastructure.Repositories.User;
 
 namespace CouponApp.Web.Infrastructure.Extensions
 {
@@ -18,6 +19,7 @@ namespace CouponApp.Web.Infrastructure.Extensions
             services.AddScoped<IOfferRepository, OfferRepository>();
             services.AddScoped<IReservationRepository, ReservationRepository>();
             services.AddScoped<ISystemSettingsRepository, SystemSettingsRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
 
             return services;
         }

@@ -8,7 +8,7 @@ namespace CouponApp.Web.Infrastructure.Extensions
     {
         public static IServiceCollection AddIdentityConfiguration(this IServiceCollection services)
         {
-            services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+            services.AddIdentity<ApplicationUser, IdentityRole<Guid>>(options =>
             {
                 options.User.RequireUniqueEmail = true;
             })
