@@ -6,7 +6,6 @@
 
         public DateTime ExpiresAt { get; set; }
 
-        public int Quantity { get; set; }
         public string OfferTitle { get; set; }
     }
 }
