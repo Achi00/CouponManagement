@@ -16,7 +16,6 @@ namespace CouponApp.Domain.Entity
         public DateTime ExpirationDate { get; set; }
 
         public Offer Offer { get; set; }
-        public User User { get; set; }
 
         private Coupon() { }
 

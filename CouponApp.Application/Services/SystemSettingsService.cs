@@ -22,7 +22,7 @@ namespace CouponApp.Application.Services
         }
         public async Task<SystemSettingsResponse> GetAsync(CancellationToken cancellationToken)
         {
-            _authorization.EnsureRole(UserRole.Admin);
+            _authorization.EnsureAuthenticated();
 
             var settings = await _systemSettingsRepository.GetAsync(cancellationToken);
 

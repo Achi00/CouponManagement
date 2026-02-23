@@ -1,17 +1,17 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
-using CouponApp.Domain.Entity;
+﻿using CouponApp.Domain.Entity;
 using CouponApp.Persistence.Identity;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 namespace CouponApp.Persistence.Contexts
 {
-    public class DiscountManagementContext : IdentityDbContext<ApplicationUser>
+    public class DiscountManagementContext : IdentityDbContext<ApplicationUser, IdentityRole<Guid>, Guid>
     {
         public DiscountManagementContext(DbContextOptions<DiscountManagementContext> options) : base(options)
         {
         }
 
-        public DbSet<User> Users { get; set; }
         public DbSet<Merchant> Merchants { get; set; }
         public DbSet<Offer> Offers { get; set; }
         public DbSet<Category> Categories { get; set; }

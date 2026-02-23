@@ -1,6 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using CouponApp.Domain.Entity;
+using CouponApp.Persistence.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using CouponApp.Domain.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,8 +28,8 @@ namespace CouponApp.Persistence.Configurations
             builder.Property(c => c.Status)
                 .IsRequired();
 
-            builder.HasOne(c => c.User)
-                .WithMany(u => u.Coupons)
+            builder.HasOne<ApplicationUser>()
+                .WithMany()
                 .HasForeignKey(c => c.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
 

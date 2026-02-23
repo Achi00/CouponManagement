@@ -22,6 +22,5 @@ namespace CouponApp.Domain.Entity
         public ReservationStatus Status { get; set; }
 
         public Offer Offer { get; set; }
-        public User User { get; set; }
     }
 }

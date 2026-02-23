@@ -22,6 +22,8 @@ namespace CouponApp.Domain.Entity
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
 
+        public DateTime CreatedAt { get; set; }
+
         public OfferStatus Status { get; set; }
         public string? RejectionReason { get; set; }
 

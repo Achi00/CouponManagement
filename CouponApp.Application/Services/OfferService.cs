@@ -14,13 +14,23 @@ namespace CouponApp.Application.Services
     {
         private readonly IOfferRepository _offerRepository;
         private readonly IMerchantRepository _merchantRepository;
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly ICurrentUserService _currentUser;
+        private readonly ISystemSettingsRepository _systemSettingsRepository;
         private readonly IAuthorizationService _authorization;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public OfferService(IOfferRepository offerRepository, IUnitOfWork unitOfWork, IAuthorizationService authorization, IMerchantRepository merchantRepository)
+        public OfferService(
+            IOfferRepository offerRepository, 
+            ICurrentUserService currentUser, 
+            IUnitOfWork unitOfWork,
+            ISystemSettingsRepository systemSettingsRepository,
+            IAuthorizationService authorization, 
+            IMerchantRepository merchantRepository)
         {
             _offerRepository = offerRepository;
             _unitOfWork = unitOfWork;
+            _currentUser = currentUser;
+            _systemSettingsRepository = systemSettingsRepository;
             _merchantRepository = merchantRepository;
             _authorization = authorization;
         }
@@ -45,37 +55,40 @@ namespace CouponApp.Application.Services
             return await _offerRepository.GetByMerchantIdAsync(merchantId, cancellationToken);
         }
 
-        public async Task CreateAsync(Guid merchantId, CreateOfferRequest dto, CancellationToken cancellationToken)
+        public async Task CreateAsync(CreateOfferRequest dto, CancellationToken cancellationToken)
         {
             _authorization.EnsureRole(UserRole.Merchant);
+            var userId = _currentUser.UserId!.Value;
 
-            var merchant = await _merchantRepository.GetByIdAsync(merchantId, cancellationToken);
+            var merchant = await _merchantRepository.GetByUserIdAsync(userId, cancellationToken);
             if (merchant == null)
             {
                 throw new NotFoundException("Merchant not found");
             }
 
             var offer = dto.Adapt<Offer>();
-            offer.MerchantId = merchantId;
+            offer.CreatedAt = DateTime.UtcNow;
             offer.Status = OfferStatus.Pending;
+            offer.MerchantId = merchant.Id;
 
             _offerRepository.Add(offer);
 
             await _unitOfWork.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task UpdateAsync(Guid merchantId, Guid offerId, UpdateOfferRequest dto, CancellationToken cancellationToken)
+        public async Task UpdateAsync(Guid offerId, UpdateOfferRequest dto, CancellationToken cancellationToken)
         {
             _authorization.EnsureRole(UserRole.Merchant);
+            var userId = _currentUser.UserId!.Value;
 
             // check if merchant exists
-            var merchant = await _merchantRepository.GetByIdAsync(merchantId, cancellationToken);
+            var merchant = await _merchantRepository.GetByUserIdAsync(userId, cancellationToken);
             if (merchant == null)
             {
                 throw new NotFoundException("Merchant not found");
             }
             // check if offer exists
-            var offer = await _offerRepository.GetByIdAsync(offerId, cancellationToken);
+            var offer = await _offerRepository.GetForUpdateAsync(offerId, cancellationToken);
             if (offer == null)
             {
                 throw new NotFoundException("Offer not found");
@@ -87,17 +100,27 @@ namespace CouponApp.Application.Services
                 throw new ForbiddenException($"Merchant is not authorized to modify this offer");
             }
 
+            // check merchant edit window
+            var settings = await _systemSettingsRepository.GetAsync(cancellationToken);
+            var editDeadline = offer.CreatedAt.AddHours(settings!.MerchantEditPeriodHours);
+
+            if (DateTime.UtcNow > editDeadline)
+            {
+                throw new BusinessException($"Offer can no longer be edited, edit period has expired");
+            }
+
             dto.Adapt(offer);
 
             await _unitOfWork.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task DeleteAsync(Guid merchantId, Guid offerId, CancellationToken cancellationToken)
+        public async Task DeleteAsync(Guid offerId, CancellationToken cancellationToken)
         {
             _authorization.EnsureRole(UserRole.Merchant);
+            var userId = _currentUser.UserId!.Value;
 
             // check if merchant exists
-            var merchant = await _merchantRepository.GetByIdAsync(merchantId, cancellationToken);
+            var merchant = await _merchantRepository.GetByUserIdAsync(userId, cancellationToken);
             if (merchant == null)
             {
                 throw new NotFoundException("Merchant not found");
@@ -159,7 +182,7 @@ namespace CouponApp.Application.Services
             await _unitOfWork.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task<RejectOfferResponse> RejectAsync(Guid offerId, string? reason, CancellationToken cancellationToken)
+        public async Task<RejectOfferResponse> RejectAsync(Guid offerId, string reason, CancellationToken cancellationToken)
         {
             _authorization.EnsureRole(UserRole.Admin);
 
@@ -171,12 +194,13 @@ namespace CouponApp.Application.Services
                 throw new NotFoundException("Offer was not found");
             }
 
-            offer.Status = OfferStatus.Rejected;
-
-            if (!string.IsNullOrWhiteSpace(reason))
+            if (string.IsNullOrWhiteSpace(reason))
             {
-                offer.RejectionReason = reason;
+                throw new BusinessException("Rejection reason is required");
             }
+
+            offer.RejectionReason = reason;
+            offer.Status = OfferStatus.Rejected;
 
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 

@@ -8,7 +8,6 @@
         public string BusinessName { get; set; }
         public string Description { get; set; }
 
-        public User User { get; set; }
         public ICollection<Offer> Offers { get; set; }
     }
 }

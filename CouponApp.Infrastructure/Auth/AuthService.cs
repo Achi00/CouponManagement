@@ -1,10 +1,11 @@
-﻿using Microsoft.AspNetCore.Identity;
-using CouponApp.Application;
+﻿using CouponApp.Application;
 using CouponApp.Application.DTOs.Auth;
+using CouponApp.Application.Interfaces.Sercives.Auth;
+using CouponApp.Domain.Enums;
 using CouponApp.Persistence.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
 using System.Text;
-using CouponApp.Application.Interfaces.Sercives.Auth;
 
 namespace CouponApp.Infrastructure.Auth
 {
@@ -28,6 +29,8 @@ namespace CouponApp.Infrastructure.Auth
                 UserName = request.UserName,
                 Email = request.Email,
                 EmailConfirmed = false,
+                Role = UserRole.Customer,
+                IsBlocked = false
             };
 
             var identityResult = await _userManager.CreateAsync(user, request.Password);
