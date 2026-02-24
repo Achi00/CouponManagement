@@ -16,6 +16,8 @@ namespace CouponApp.Application.Interfaces.Sercives
         Task<MerchantProfileResponse> GetByUserIdAsync(CancellationToken cancellationToken);
         Task UpdateAsync(UpdateProfileMerchantRequest request, CancellationToken cancellationToken);
 
+        Task<bool> MerchantProfileExistsAsync(CancellationToken cancellationToken);
+
         Task RegisterAsMerchantAsync(RegisterAsMerchantRequest request, CancellationToken cancellationToken);
     }
 }

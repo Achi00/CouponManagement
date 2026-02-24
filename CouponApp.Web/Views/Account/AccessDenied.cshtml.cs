@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace CouponApp.Web.Views.Products
+namespace CouponApp.Web.Views.Account
 {
-    public class EditModel : PageModel
+    public class AccessDeniedModel : PageModel
     {
         public void OnGet()
         {

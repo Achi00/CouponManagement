@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace CouponApp.Web.Views.Products
+namespace CouponApp.Web.Views.Merchant
 {
-    public class DetailsModel : PageModel
+    public class CreateOfferModel : PageModel
     {
         public void OnGet()
         {

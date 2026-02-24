@@ -8,12 +8,7 @@ namespace CouponApp.Web.Mapping
     {
         public void Register(TypeAdapterConfig config)
         {
-            config.NewConfig<CreateProductViewModel, CreateProductRequest>();
-
-            //config.NewConfig<ProductEditViewModel, UpdateProductRequest>();
-            config.NewConfig<ProductResponse, DisplayProductViewModel>()
-            .Map(dest => dest.PriceFormatted, src => $"${src.Price:F2}")
-            .Map(dest => dest.IsLowStock, src => src.StockQuantity < 10);
+            
         }
     }
 }

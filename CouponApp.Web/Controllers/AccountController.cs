@@ -81,6 +81,10 @@ namespace CouponApp.Web.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        public IActionResult AccessDenied()
+        {
+            return View();
+        }
 
         public async Task<IActionResult> Logout()
         {

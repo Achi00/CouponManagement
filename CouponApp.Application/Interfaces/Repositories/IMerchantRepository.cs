@@ -11,5 +11,6 @@ namespace CouponApp.Application.Interfaces.Repositories
     {
         Task<Merchant?> GetByUserIdAsync(Guid userId, CancellationToken cancellationToken);
         Task<Merchant?> GetForUpdateByUserIdAsync(Guid userId, CancellationToken cancellationToken);
+        Task<bool> ExistsForUserAsync(Guid userId, CancellationToken cancellationToken);
     }
 }

@@ -54,6 +54,15 @@ namespace CouponApp.Application.Services
             return merchant.Adapt<MerchantProfileResponse>();
         }
 
+        public async Task<bool> MerchantProfileExistsAsync(CancellationToken cancellationToken)
+        {
+            _authorization.EnsureAuthenticated();
+
+            var userId = _currentUser.UserId!.Value;
+
+            return await _merchantRepository.ExistsForUserAsync(userId, cancellationToken);
+        }
+
         public async Task RegisterAsMerchantAsync(RegisterAsMerchantRequest request, CancellationToken cancellationToken)
         {
             _authorization.EnsureAuthenticated();
@@ -70,6 +79,13 @@ namespace CouponApp.Application.Services
             if (user.Role == UserRole.Merchant)
             {
                 throw new BusinessException("User already registered as merchant");
+            }
+
+            var existing = await _merchantRepository.GetByUserIdAsync(userId, cancellationToken);
+
+            if (existing != null)
+            {
+                throw new BusinessException("Merchant profile already exists");
             }
 
             await _userRepository.UpdateRoleAsync(userId, UserRole.Merchant, cancellationToken);

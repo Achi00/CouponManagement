@@ -1,4 +1,5 @@
 using CouponApp.Web.Infrastructure.Extensions;
+using CouponApp.Web.Infrastructure.Extensions.Auth;
 
 namespace CouponApp.Web
 {
@@ -20,10 +21,17 @@ namespace CouponApp.Web
 
             var app = builder.Build();
 
-            app.UseErrorHandling()
-               .UseSecurityMiddleware()
-               .UseStaticAssets()
-               .UseDefaultRouting();
+            app.UseErrorHandling();
+
+            app.UseHttpsRedirection();
+
+            app.UseStaticFiles();
+
+            app.UseRouting();
+
+            app.UseSecurityMiddleware();
+
+            app.UseDefaultRouting();
 
             await app.SeedDatabaseAsync();
 

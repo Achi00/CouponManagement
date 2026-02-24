@@ -8,7 +8,7 @@ namespace CouponApp.Application.Interfaces.Sercives
         Task ApproveAsync(Guid offerId, CancellationToken cancellationToken);
         Task CreateAsync(CreateOfferRequest dto, CancellationToken cancellationToken);
         Task DeleteAsync(Guid offerId, CancellationToken cancellationToken);
-        Task<List<OfferResponse>> GetByMerchantAsync(Guid merchantId, CancellationToken cancellationToken);
+        Task<List<OfferResponse>> GetByMerchantsAsync(CancellationToken cancellationToken);
         Task<OfferDetailsResponse> GetDetailsAsync(Guid offerId, CancellationToken cancellationToken);
         // admin
         Task<List<OfferResponse>> GetPendingAsync(CancellationToken cancellationToken);

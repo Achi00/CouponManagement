@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using CouponApp.Domain.Enums;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace CouponApp.Persistence.Identity
@@ -31,7 +32,8 @@ namespace CouponApp.Persistence.Identity
                 {
                     UserName = adminEmail,
                     Email = adminEmail,
-                    EmailConfirmed = true
+                    EmailConfirmed = true,
+                    Role = UserRole.Admin
                 };
 
                 await userManager.CreateAsync(adminUser, adminPassword);

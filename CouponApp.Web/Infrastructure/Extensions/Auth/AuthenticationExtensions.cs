@@ -1,8 +1,10 @@
 ﻿using CouponApp.Application.Interfaces.Sercives.Auth;
 using CouponApp.Application.Services.Auth;
 using CouponApp.Infrastructure.Auth;
+using CouponApp.Persistence.Identity;
+using Microsoft.AspNetCore.Identity;
 
-namespace CouponApp.Web.Infrastructure.Extensions
+namespace CouponApp.Web.Infrastructure.Extensions.Auth
 {
     public static class AuthenticationExtensions
     {
@@ -10,6 +12,16 @@ namespace CouponApp.Web.Infrastructure.Extensions
         {
             services.AddAuthentication().AddCookie();
             services.AddAuthorization();
+
+            //extension for policies
+            services.AddAppAuthorization();
+
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.AccessDeniedPath = "/Account/AccessDenied";
+            });
+
+            services.AddScoped<IUserClaimsPrincipalFactory<ApplicationUser>, AppClaimsPrincipalFactory>();
 
             services.AddHttpContextAccessor();
             services.AddScoped<ICurrentUserService, CurrentUserService>();

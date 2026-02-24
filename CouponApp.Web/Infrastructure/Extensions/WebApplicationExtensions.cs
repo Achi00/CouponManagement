@@ -25,7 +25,6 @@ namespace CouponApp.Web.Infrastructure.Extensions
 
         public static WebApplication UseSecurityMiddleware(this WebApplication app)
         {
-            app.UseHttpsRedirection();
             app.UseAuthentication();
             app.UseAuthorization();
 

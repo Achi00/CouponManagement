@@ -52,11 +52,20 @@ namespace CouponApp.Application.Services
             return await _offerRepository.GetApprovedAsync(cancellationToken);
         }
 
-        public async Task<List<OfferResponse>> GetByMerchantAsync(Guid merchantId, CancellationToken cancellationToken)
+        public async Task<List<OfferResponse>> GetByMerchantsAsync(CancellationToken cancellationToken)
         {
             _authorization.EnsureRole(UserRole.Merchant);
 
-            return await _offerRepository.GetByMerchantIdAsync(merchantId, cancellationToken);
+            var userId = _currentUser.UserId!.Value;
+
+            var merchant = await _merchantRepository.GetByUserIdAsync(userId, cancellationToken);
+
+            if (merchant == null)
+            {
+                throw new MerchantProfileMissingException();
+            }
+
+            return await _offerRepository.GetByMerchantIdAsync(merchant.Id, cancellationToken);
         }
 
         public async Task CreateAsync(CreateOfferRequest dto, CancellationToken cancellationToken)
@@ -150,7 +159,6 @@ namespace CouponApp.Application.Services
         // for customer browsing
         public async Task<OfferDetailsResponse> GetDetailsAsync(Guid offerId, CancellationToken cancellationToken)
         {
-
             var offer = await _offerRepository.GetByIdAsync(offerId, cancellationToken);
             if (offer == null)
             {

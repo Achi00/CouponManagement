@@ -23,6 +23,11 @@ namespace CouponApp.Infrastructure.Repositories.Merchants
             _context.Merchants.Remove(entity);
         }
 
+        public async Task<bool> ExistsForUserAsync(Guid userId, CancellationToken cancellationToken)
+        {
+            return await _context.Merchants.AsNoTracking().AnyAsync(x => x.UserId == userId, cancellationToken);
+        }
+
         public async Task<Merchant?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
         {
             return await _context.Merchants
