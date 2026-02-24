@@ -1,4 +1,6 @@
-﻿namespace CouponApp.Application.DTOs.Offers
+﻿using CouponApp.Domain.Enums;
+
+namespace CouponApp.Application.DTOs.Offers
 {
     public class OfferResponse
     {
@@ -10,6 +12,8 @@
 
         public decimal OriginalPrice { get; set; }
         public decimal DiscountedPrice { get; set; }
+
+        public OfferStatus Status { get; set; }
 
         public int RemainingCoupons { get; set; }
 

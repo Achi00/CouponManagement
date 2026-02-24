@@ -1,4 +1,5 @@
-﻿@using CouponApp.Web.Models.Merchant
+﻿@using CouponApp.Domain.Enums
+@using CouponApp.Web.Models.Merchant
 
 @model List<MerchantOfferViewModel>
 
@@ -26,21 +27,34 @@ else
         @foreach (var offer in Model)
         {
             <div class="card" style="padding:20px">
-                <div class="badge badge-accent">@offer.Status</div>
+                @{
+                    var badgeClass = offer.Status switch
+                    {
+                        OfferStatus.Approved => "badge badge-success",
+                        OfferStatus.Rejected => "badge badge-danger",
+                        _ => "badge badge-accent"
+                    };
+                }
+                <div class="@badgeClass">@offer.Status</div>
 
                 <h3 style="margin-top:10px">@offer.Title</h3>
 
                 <p class="muted">$@offer.DiscountedPrice</p>
 
-                <div style="margin-top:10px">
-                    <a asp-action="Edit" asp-route-id="@offer.Id" class="btn btn-outline">Edit</a>
-                    <form asp-action="Delete" asp-route-id="@offer.Id" method="post" style="display:inline">
-                        <button class="btn btn-danger"
-                                onclick="return confirm('Delete this offer?')">
-                            Delete
-                        </button>
-                    </form>
-                </div>
+                @{
+                    if (OfferStatus.Rejected != offer.Status)
+                    {
+                        <div style="margin-top:10px">
+                            <a asp-action="Edit" asp-route-id="@offer.Id" class="btn btn-outline">Edit</a>
+                            <form asp-action="Delete" asp-route-id="@offer.Id" method="post" style="display:inline">
+                                <button class="btn btn-danger"
+                                        onclick="return confirm('Delete this offer?')">
+                                    Delete
+                                </button>
+                            </form>
+                        </div>
+                    }
+                }
             </div>
         }
     </div>

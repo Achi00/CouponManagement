@@ -8,14 +8,24 @@
 
 <h2>Create Category</h2>
 
-<form asp-action="Create" method="post">
+<div class="card p-4 shadow-sm" style="max-width:500px">
 
-    <div class="mb-3">
-        <label asp-for="Name"></label>
-        <input asp-for="Name" class="form-control" />
-        <span asp-validation-for="Name"></span>
-    </div>
+    <form asp-action="Create" method="post">
 
-    <button class="btn btn-success">Create</button>
+        <div class="mb-3">
+            <label asp-for="Name"></label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name"></span>
+        </div>
 
-</form>
+        <button class="btn btn-primary">
+            Create
+        </button>
+
+        <a asp-action="Index" class="btn btn-outline-secondary">
+            Back
+        </a>
+
+    </form>
+
+</div>

@@ -12,11 +12,13 @@ namespace CouponApp.Web.Models.Account
 
         [Required]
         [DataType(DataType.Password)]
+        [Display(Name = "New Password")]
         public string Password { get; set; }
 
         [Required]
         [Compare("Password")]
         [DataType(DataType.Password)]
+        [Display(Name = "Confirm Password")]
         public string ConfirmPassword { get; set; }
     }
 }

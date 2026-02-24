@@ -259,6 +259,13 @@ namespace CouponApp.Web.Controllers
 
             }
 
+            var isSamePassword = await _userManager.CheckPasswordAsync(user, model.Password);
+            if (isSamePassword)
+            {
+                ModelState.AddModelError("Password", "New password must be different from your current password.");
+                return View(model);
+            }
+
             var result = await _userManager.ResetPasswordAsync(
                 user,
                 model.Token,

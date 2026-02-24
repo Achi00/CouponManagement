@@ -19,9 +19,9 @@ namespace CouponApp.Web.Areas.Admin.Controllers
             _service = service;
         }
 
-        public async Task<IActionResult> Index(CancellationToken ct)
+        public async Task<IActionResult> Index(CancellationToken cancellationToken = default)
         {
-            var settings = await _service.GetAsync(ct);
+            var settings = await _service.GetAsync(cancellationToken);
 
             var vm = settings.Adapt<SystemSettingsViewModel>();
 
@@ -29,12 +29,14 @@ namespace CouponApp.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Index(SystemSettingsViewModel vm, CancellationToken ct)
+        public async Task<IActionResult> Index(SystemSettingsViewModel vm, CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
+            {
                 return View(vm);
+            }
 
-            await _service.UpdateAsync(vm.Adapt<UpdateSystemSettingsRequest>(), ct);
+            await _service.UpdateAsync(vm.Adapt<UpdateSystemSettingsRequest>(), cancellationToken);
 
             TempData["Success"] = "Settings updated";
 

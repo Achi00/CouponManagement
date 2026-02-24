@@ -1,4 +1,5 @@
-﻿using CouponApp.Application.Interfaces.Sercives;
+﻿using CouponApp.Application.DTOs.Categories;
+using CouponApp.Application.Interfaces.Sercives;
 using CouponApp.Web.Areas.Admin.ViewModels;
 using CouponApp.Web.Constants;
 using Mapster;
@@ -25,6 +26,24 @@ namespace CouponApp.Web.Areas.Admin.Controllers
             var vm = categories.Adapt<List<CategoryViewModel>>();
 
             return View(vm);
+        }
+
+        public IActionResult Create()
+        {
+            return View(new CreateCategoryViewModel());
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(CreateCategoryViewModel vm, CancellationToken ct)
+        {
+            if (!ModelState.IsValid)
+                return View(vm);
+
+            await _service.CreateAsync(vm.Adapt<CreateCategoryRequest>(), ct);
+
+            TempData["Success"] = "Category created";
+
+            return RedirectToAction(nameof(Index));
         }
     }
 }

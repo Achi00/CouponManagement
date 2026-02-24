@@ -15,7 +15,8 @@ namespace CouponApp.Infrastructure.Repositories.SystemSettings
         }
         public async Task<SystemSetting?> GetAsync(CancellationToken cancellationToken)
         {
-            return await _context.SystemSettings.AsNoTracking().FirstOrDefaultAsync(cancellationToken);
+            // tracking needed for update data
+            return await _context.SystemSettings.FirstOrDefaultAsync(cancellationToken);
         }
     }
 }
