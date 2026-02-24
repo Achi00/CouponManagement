@@ -1,0 +1,40 @@
+﻿@using CouponApp.Web.Models.Merchant
+
+@model List<MerchantOfferViewModel>
+
+<div class="page-header">
+    <h1>My Offers</h1>
+    <p>Manage your deals</p>
+</div>
+
+<div style="margin-bottom:20px">
+    <a href="/Merchant/CreateOffer" class="btn btn-primary">Create Offer</a>
+</div>
+
+@if (!Model.Any())
+{
+    <div class="card" style="padding:30px;text-align:center">
+        <h3>No offers yet</h3>
+        <p class="muted">Create your first offer to start selling.</p>
+    </div>
+}
+else
+{
+    <div class="grid">
+        @foreach (var offer in Model)
+        {
+            <div class="card" style="padding:20px">
+                <div class="badge badge-accent">@offer.Status</div>
+
+                <h3 style="margin-top:10px">@offer.Title</h3>
+
+                <p class="muted">$@offer.DiscountedPrice</p>
+
+                <div style="margin-top:10px">
+                    <a href="/Merchant/Edit/@offer.Id" class="btn btn-outline">Edit</a>
+                    <a href="/Merchant/Delete/@offer.Id" class="btn btn-danger">Delete</a>
+                </div>
+            </div>
+        }
+    </div>
+}

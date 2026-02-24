@@ -2,6 +2,7 @@
 using CouponApp.Application.Services.Auth;
 using CouponApp.Infrastructure.Auth;
 using CouponApp.Persistence.Identity;
+using CouponApp.Web.Security;
 using Microsoft.AspNetCore.Identity;
 
 namespace CouponApp.Web.Infrastructure.Extensions.Auth
@@ -26,6 +27,7 @@ namespace CouponApp.Web.Infrastructure.Extensions.Auth
             services.AddHttpContextAccessor();
             services.AddScoped<ICurrentUserService, CurrentUserService>();
             services.AddScoped<IAuthorizationService, AuthorizationService>();
+            services.AddScoped<AuthSessionService>();
 
             return services;
         }
