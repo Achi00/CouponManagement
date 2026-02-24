@@ -1,0 +1,43 @@
+﻿@using CouponApp.Web.Areas.Admin.ViewModels
+
+@model List<AdminOfferViewModel>
+
+<h2>Pending Offers</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Merchant</th>
+            <th>Category</th>
+            <th>Price</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var offer in Model)
+        {
+            <tr>
+                <td>@offer.Title</td>
+                <td>@offer.MerchantName</td>
+                <td>@offer.CategoryName</td>
+                <td>@offer.DiscountedPrice</td>
+                <td>
+
+                    <form asp-action="Approve" method="post">
+                        <input type="hidden" name="id" value="@offer.Id" />
+                        <button class="btn btn-success">Approve</button>
+                    </form>
+
+                    <form asp-action="Reject" method="post">
+                        <input type="hidden" name="id" value="@offer.Id" />
+                        <input name="reason" placeholder="Reason" />
+                        <button class="btn btn-danger">Reject</button>
+                    </form>
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

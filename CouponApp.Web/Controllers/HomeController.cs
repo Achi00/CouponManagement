@@ -1,4 +1,5 @@
 using CouponApp.Application.Interfaces.Sercives;
+using CouponApp.Application.Interfaces.Sercives.Offer;
 using CouponApp.Web.Models.Home;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,10 +7,10 @@ namespace CouponApp.Web.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly IOfferService _offerService;
+        private readonly IOfferQueryService _offerService;
         private readonly ICategoryService _categoryService;
 
-        public HomeController(IOfferService offerService, ICategoryService categoryService)
+        public HomeController(IOfferQueryService offerService, ICategoryService categoryService)
         {
             _offerService = offerService;
             _categoryService = categoryService;
