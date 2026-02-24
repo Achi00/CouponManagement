@@ -1,6 +1,7 @@
 ﻿using CouponApp.Application.DTOs.Merchant;
 using CouponApp.Application.DTOs.Offers;
 using CouponApp.Application.Interfaces.Sercives;
+using CouponApp.Application.Interfaces.Sercives.Offer;
 using CouponApp.Web.Factories;
 using CouponApp.Web.Models.Merchant;
 using CouponApp.Web.Models.Offer;
@@ -15,15 +16,17 @@ namespace CouponApp.Web.Controllers
     public class MerchantController : Controller
     {
         private readonly IMerchantService _merchantService;
-        private readonly IOfferService _offerService;
+        private readonly IMerchantOfferService _offerService;
+        private readonly IOfferQueryService _queryService;
         private readonly IImageUploadService _imageUploadService;
         private readonly AuthSessionService _authSession;
         private readonly CreateOfferViewModelFactory _factory;
         private readonly TypeAdapterConfig _mapConfig;
 
         public MerchantController(
-            IMerchantService merchantService, 
-            IOfferService offerService,
+            IMerchantService merchantService,
+            IMerchantOfferService offerService,
+            IOfferQueryService queryService,
             IImageUploadService imageUploadService,
             AuthSessionService authSession,
             TypeAdapterConfig mapConfig,
@@ -31,6 +34,7 @@ namespace CouponApp.Web.Controllers
         {
             _merchantService = merchantService;
             _offerService = offerService;
+            _queryService = queryService;
             _imageUploadService = imageUploadService;
             _authSession = authSession;
             _mapConfig = mapConfig;
@@ -40,7 +44,7 @@ namespace CouponApp.Web.Controllers
         [Authorize(Policy = "MerchantOnly")]
         public async Task<IActionResult> Index(CancellationToken cancellationToken)
         {
-            var offers = await _offerService.GetByMerchantsAsync(cancellationToken);
+            var offers = await _offerService.GetByMerchantAsync(cancellationToken);
 
             var vm = offers.Adapt<List<MerchantOfferViewModel>>();
 
@@ -108,7 +112,7 @@ namespace CouponApp.Web.Controllers
         // edit merchant offer
         public async Task<IActionResult> Edit(Guid id, CancellationToken cancellationToken = default)
         {
-            var offer = await _offerService.GetDetailsAsync(id, cancellationToken);
+            var offer = await _queryService.GetDetailsAsync(id, cancellationToken);
             var vm = offer.Adapt<EditOfferViewModel>();
             vm.Categories = (await _factory.CreateAsync(cancellationToken)).Categories;
             vm.ExistingImageUrl = offer.ImageUrl;

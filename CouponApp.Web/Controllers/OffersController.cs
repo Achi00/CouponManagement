@@ -1,5 +1,6 @@
 ﻿using CouponApp.Application.DTOs.Offers;
 using CouponApp.Application.Interfaces.Sercives;
+using CouponApp.Application.Interfaces.Sercives.Offer;
 using CouponApp.Web.Models.Offer;
 using Mapster;
 using Microsoft.AspNetCore.Mvc;
@@ -8,9 +9,9 @@ namespace CouponApp.Web.Controllers
 {
     public class OffersController : Controller
     {
-        private readonly IOfferService _offerService;
+        private readonly IOfferQueryService _offerService;
 
-        public OffersController(IOfferService offerService)
+        public OffersController(IOfferQueryService offerService)
         {
             _offerService = offerService;
         }

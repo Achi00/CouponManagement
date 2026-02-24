@@ -1,7 +1,9 @@
 ﻿using CouponApp.Application.Interfaces;
 using CouponApp.Application.Interfaces.Sercives;
 using CouponApp.Application.Interfaces.Sercives.Auth;
+using CouponApp.Application.Interfaces.Sercives.Offer;
 using CouponApp.Application.Services;
+using CouponApp.Application.Services.Offers;
 using CouponApp.Infrastructure.Auth;
 using CouponApp.Infrastructure.BackgroundJobs;
 using CouponApp.Persistence;
@@ -21,7 +23,11 @@ namespace CouponApp.Web.Infrastructure.Extensions
 
             // application services
             services.AddScoped<IMerchantService, MerchantService>();
-            services.AddScoped<IOfferService, OfferService>();
+
+            services.AddScoped<IOfferQueryService, OfferService>();
+            services.AddScoped<IMerchantOfferService, OfferService>();
+            services.AddScoped<IAdminOfferService, AdminOfferService>();
+
             services.AddScoped<ICouponService, CouponService>();
             services.AddScoped<IReservationService, ReservationService>();
             services.AddScoped<ICategoryService, CategoryService>();
