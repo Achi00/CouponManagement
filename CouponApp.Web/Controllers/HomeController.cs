@@ -1,32 +1,38 @@
+using CouponApp.Application.Interfaces.Sercives;
+using CouponApp.Web.Models.Home;
 using Microsoft.AspNetCore.Mvc;
-using CouponApp.Web.Models;
-using System.Diagnostics;
 
 namespace CouponApp.Web.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly IOfferService _offerService;
+        private readonly ICategoryService _categoryService;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(IOfferService offerService, ICategoryService categoryService)
         {
-            _logger = logger;
+            _offerService = offerService;
+            _categoryService = categoryService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index(CancellationToken cancellationToken)
         {
-            return View();
+            var offers = await _offerService.GetApprovedAsync(cancellationToken);
+            var categories = await _categoryService.GetAllAsync(cancellationToken);
+
+            var model = new HomeViewModel
+            {
+                Offers = offers,
+                Categories = categories
+            };
+
+            return View(model);
         }
 
-        public IActionResult Privacy()
+        public async Task<IActionResult> Details(Guid id, CancellationToken cancellationToken)
         {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            var offer = await _offerService.GetDetailsAsync(id, cancellationToken);
+            return View(offer);
         }
     }
 }

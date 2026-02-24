@@ -4,6 +4,7 @@ namespace CouponApp.Application.Interfaces.Sercives
 {
     public interface IOfferService
     {
+        Task<List<OfferResponse>> GetApprovedAsync(CancellationToken cancellationToken);
         Task ApproveAsync(Guid offerId, CancellationToken cancellationToken);
         Task CreateAsync(CreateOfferRequest dto, CancellationToken cancellationToken);
         Task DeleteAsync(Guid offerId, CancellationToken cancellationToken);

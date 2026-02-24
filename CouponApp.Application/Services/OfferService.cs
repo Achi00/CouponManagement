@@ -47,6 +47,10 @@ namespace CouponApp.Application.Services
 
             return offer.Adapt<OfferResponse>();
         }
+        public async Task<List<OfferResponse>> GetApprovedAsync(CancellationToken cancellationToken)
+        {
+            return await _offerRepository.GetApprovedAsync(cancellationToken);
+        }
 
         public async Task<List<OfferResponse>> GetByMerchantAsync(Guid merchantId, CancellationToken cancellationToken)
         {
@@ -146,7 +150,6 @@ namespace CouponApp.Application.Services
         // for customer browsing
         public async Task<OfferDetailsResponse> GetDetailsAsync(Guid offerId, CancellationToken cancellationToken)
         {
-            _authorization.EnsureAuthenticated();
 
             var offer = await _offerRepository.GetByIdAsync(offerId, cancellationToken);
             if (offer == null)

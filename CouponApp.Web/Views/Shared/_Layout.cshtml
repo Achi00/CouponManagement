@@ -7,34 +7,254 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/CouponApp.Web.styles.css" asp-append-version="true" />
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --bg: #0d0d0d;
+            --surface: #161616;
+            --surface2: #1f1f1f;
+            --border: #2a2a2a;
+            --accent: #e8ff47;
+            --accent2: #ff6b35;
+            --text: #f0f0f0;
+            --muted: #888;
+            --font-display: 'Syne', sans-serif;
+            --font-body: 'DM Sans', sans-serif;
+            --radius: 12px;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: var(--font-body);
+            font-size: 15px;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* NAV */
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(13,13,13,0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            padding: 0 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 64px;
+        }
+
+        .nav-logo {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--accent);
+            text-decoration: none;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-logo span { color: var(--text); }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 0.875rem;
+            font-weight: 500;
+            padding: 0.4rem 0.75rem;
+            border-radius: 8px;
+            transition: color 0.2s, background 0.2s;
+        }
+
+        .nav-links a:hover { color: var(--text); background: var(--surface2); }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.5rem 1.25rem;
+            border-radius: 8px;
+            font-family: var(--font-body);
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            text-decoration: none;
+            border: none;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: #0d0d0d;
+            font-weight: 700;
+        }
+
+        .btn-primary:hover { background: #d4eb30; transform: translateY(-1px); }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+
+        .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+
+        .btn-danger {
+            background: #ff4444;
+            color: white;
+            font-weight: 600;
+        }
+
+        .btn-danger:hover { background: #e03030; }
+
+        /* MAIN */
+        main { padding: 2.5rem 2rem; max-width: 1280px; margin: 0 auto; }
+
+        /* ALERTS */
+        .alert {
+            padding: 0.875rem 1.25rem;
+            border-radius: var(--radius);
+            margin-bottom: 1.5rem;
+            font-size: 0.875rem;
+            border-left: 3px solid;
+        }
+
+        .alert-success { background: rgba(100,220,100,0.08); border-color: #4caf50; color: #81c784; }
+        .alert-error { background: rgba(255,80,80,0.08); border-color: #f44336; color: #e57373; }
+        .alert-info { background: rgba(232,255,71,0.08); border-color: var(--accent); color: var(--accent); }
+
+        /* BADGE */
+        .badge {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .badge-accent { background: var(--accent); color: #0d0d0d; }
+        .badge-orange { background: var(--accent2); color: white; }
+        .badge-muted { background: var(--surface2); color: var(--muted); }
+
+        /* FOOTER */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 2rem;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.8rem;
+            margin-top: 4rem;
+        }
+
+        /* FORM */
+        .form-group { margin-bottom: 1.25rem; }
+        .form-label { display: block; font-size: 0.8rem; font-weight: 600; color: var(--muted); margin-bottom: 0.4rem; text-transform: uppercase; letter-spacing: 0.5px; }
+        .form-control {
+            width: 100%;
+            padding: 0.65rem 1rem;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text);
+            font-family: var(--font-body);
+            font-size: 0.9rem;
+            transition: border-color 0.2s;
+            outline: none;
+        }
+        .form-control:focus { border-color: var(--accent); }
+        .form-control::placeholder { color: var(--muted); }
+        .field-validation-error { color: #e57373; font-size: 0.8rem; margin-top: 0.3rem; display: block; }
+        .validation-summary-errors ul { list-style: none; }
+        .validation-summary-errors li { color: #e57373; font-size: 0.85rem; margin-bottom: 0.25rem; }
+
+        /* CARD */
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+            transition: border-color 0.2s, transform 0.2s;
+        }
+
+        .card:hover { border-color: #3a3a3a; transform: translateY(-2px); }
+
+        /* PAGE HEADER */
+        .page-header {
+            margin-bottom: 2.5rem;
+        }
+
+        .page-header h1 {
+            font-family: var(--font-display);
+            font-size: 2.25rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+            line-height: 1.1;
+        }
+
+        .page-header p {
+            color: var(--muted);
+            margin-top: 0.5rem;
+            font-size: 0.95rem;
+        }
+    </style>
+
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">CouponApp.Web</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
+
+    <nav>
+        <a href="/" class="nav-logo">Best<span>Offers</span></a>
+        <ul class="nav-links">
+            <li><a href="/">Browse</a></li>
+            @if (User.Identity?.IsAuthenticated == true)
+            {
+                @if (User.IsInRole("Admin"))
+                {
+                    <li><a href="/Admin">Admin Panel</a></li>
+                }
+                @if (User.IsInRole("Merchant"))
+                {
+                    <li><a href="/Merchant">My Merchant</a></li>
+                }
+                <li><a href="/Profile">Profile</a></li>
+                <li>
+                    <form asp-controller="Account" asp-action="Logout" method="post" style="display:inline">
+                        <button type="submit" class="btn btn-outline" style="cursor:pointer">Logout</button>
+                    </form>
+                </li>
+            }
+            else
+            {
+                <li><a href="/Account/Login" class="btn btn-outline">Login</a></li>
+                <li><a href="/Account/Register" class="btn btn-primary">Get Started</a></li>
+            }
+        </ul>
+    </nav>
+
+    <main>
+        @if (TempData["Success"] != null)
+        {
+            <div class="alert alert-success">@TempData["Success"]</div>
+        }
+        @if (TempData["Error"] != null)
+        {
+            <div class="alert alert-error">@TempData["Error"]</div>
+        }
+
+        @RenderBody()
+    </main>
+
 
     <footer class="border-top footer text-muted">
         <div class="container">

@@ -1,9 +1,358 @@
-﻿@model DisplayProductViewModel
+﻿@using CouponApp.Web.Models.Offer
 
-<h1>Product details</h1>
+@model OfferDetailsViewModel
 
-<h2>@Model.Id</h2>
-<h2>@Model.Name</h2>
-<h2>@Model.Price</h2>
-<h2>@Model.StockStatus</h2>
-<h2>@Model.StockQuantity</h2>
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+<style>
+    .back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        color: var(--muted);
+        text-decoration: none;
+        font-size: 0.85rem;
+        margin-bottom: 2rem;
+        transition: color 0.2s;
+    }
+
+        .back-link:hover {
+            color: var(--text);
+        }
+
+    .detail-grid {
+        display: grid;
+        grid-template-columns: 1fr 380px;
+        gap: 2.5rem;
+        align-items: start;
+    }
+
+    @@media (max-width: 860px) {
+        .detail-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    /* LEFT SIDE */
+    .detail-category {
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        color: var(--accent);
+        margin-bottom: 0.75rem;
+    }
+
+    .detail-title {
+        font-family: var(--font-display);
+        font-size: clamp(1.75rem, 4vw, 2.75rem);
+        font-weight: 800;
+        letter-spacing: -1.5px;
+        line-height: 1.1;
+        margin-bottom: 1.25rem;
+    }
+
+    .detail-merchant {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--muted);
+        font-size: 0.85rem;
+        margin-bottom: 2rem;
+    }
+
+    .merchant-dot {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background: var(--surface2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.7rem;
+        font-weight: 700;
+        color: var(--accent);
+        border: 1px solid var(--border);
+    }
+
+    .detail-description {
+        color: rgba(240,240,240,0.75);
+        font-size: 0.95rem;
+        line-height: 1.8;
+        margin-bottom: 2rem;
+    }
+
+    .detail-stats {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .stat-box {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 1rem;
+    }
+
+    .stat-label {
+        font-size: 0.7rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: var(--muted);
+        margin-bottom: 0.4rem;
+    }
+
+    .stat-value {
+        font-family: var(--font-display);
+        font-size: 1.3rem;
+        font-weight: 800;
+        letter-spacing: -0.5px;
+    }
+
+        .stat-value.accent {
+            color: var(--accent);
+        }
+
+        .stat-value.orange {
+            color: var(--accent2);
+        }
+
+        .stat-value.warning {
+            color: #ffd600;
+        }
+
+    /* RIGHT SIDE - PURCHASE PANEL */
+    .purchase-panel {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 1.75rem;
+        position: sticky;
+        top: 80px;
+    }
+
+    .panel-pricing {
+        margin-bottom: 1.5rem;
+    }
+
+    .panel-price-new {
+        font-family: var(--font-display);
+        font-size: 2.75rem;
+        font-weight: 800;
+        letter-spacing: -2px;
+        color: var(--accent);
+        line-height: 1;
+    }
+
+    .panel-price-row {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-top: 0.4rem;
+    }
+
+    .panel-price-old {
+        font-size: 0.9rem;
+        color: var(--muted);
+        text-decoration: line-through;
+    }
+
+    .discount-tag {
+        background: rgba(255,107,53,0.15);
+        color: var(--accent2);
+        border: 1px solid rgba(255,107,53,0.3);
+        font-size: 0.75rem;
+        font-weight: 700;
+        padding: 0.2rem 0.6rem;
+        border-radius: 20px;
+    }
+
+    .panel-divider {
+        border: none;
+        border-top: 1px solid var(--border);
+        margin: 1.25rem 0;
+    }
+
+    .panel-info-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 0.85rem;
+        margin-bottom: 0.6rem;
+    }
+
+    .panel-info-label {
+        color: var(--muted);
+    }
+
+    .panel-info-value {
+        font-weight: 600;
+    }
+
+        .panel-info-value.urgent {
+            color: var(--accent2);
+        }
+
+        .panel-info-value.accent {
+            color: var(--accent);
+        }
+
+    .panel-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        margin-top: 1.5rem;
+    }
+
+        .panel-actions .btn {
+            width: 100%;
+            justify-content: center;
+            padding: 0.75rem;
+            font-size: 0.95rem;
+        }
+
+    .sold-out-notice {
+        text-align: center;
+        padding: 1.25rem;
+        background: rgba(255,255,255,0.03);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+    }
+
+    .login-notice {
+        font-size: 0.8rem;
+        color: var(--muted);
+        text-align: center;
+        margin-top: 0.75rem;
+    }
+
+        .login-notice a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+</style>
+
+<a href="/" class="back-link">← Back to deals</a>
+
+<div class="detail-grid">
+
+    <!-- LEFT: OFFER INFO -->
+    <div>
+        <div class="detail-category">@Model.CategoryName</div>
+        <h1 class="detail-title">@Model.Title</h1>
+
+        <div class="detail-merchant">
+            <div class="merchant-dot">@Model.MerchantInitial</div>
+            by @Model.MerchantName
+        </div>
+
+        <p class="detail-description">@Model.Description</p>
+
+        <div class="detail-stats">
+            <div class="stat-box">
+                <div class="stat-label">Remaining</div>
+                <div class="stat-value @(Model.IsUrgent ? "orange" : Model.IsSoldOut ? "muted" : "accent")">
+                    @(Model.IsSoldOut ? "0" : Model.RemainingCoupons.ToString())
+                </div>
+            </div>
+
+            <div class="stat-box">
+                <div class="stat-label">Ends</div>
+                <div class="stat-value @(Model.DaysLeft <= 1 ? "warning" : "")">
+                    @(Model.DaysLeft <= 0 ? "Expired" :
+                                        Model.DaysLeft == 1 ? "Today" :
+                                        $"{Model.DaysLeft}d")
+                </div>
+            </div>
+
+            <div class="stat-box">
+                <div class="stat-label">You Save</div>
+                <div class="stat-value accent">@Model.DiscountPercent%</div>
+            </div>
+        </div>
+
+        <div style="color: var(--muted); font-size: 0.8rem;">
+            <span>Available from @Model.StartDate.ToString("MMM dd, yyyy")</span>
+            <span style="margin: 0 0.5rem;">·</span>
+            <span>Expires @Model.EndDate.ToString("MMM dd, yyyy")</span>
+        </div>
+    </div>
+
+    <!-- RIGHT: PURCHASE PANEL -->
+    <div class="purchase-panel">
+        <div class="panel-pricing">
+            <div class="panel-price-new">$@Model.DiscountedPrice.ToString("0.00")</div>
+            <div class="panel-price-row">
+                <span class="panel-price-old">$@Model.OriginalPrice.ToString("0.00")</span>
+                <span class="discount-tag">-@Model.DiscountPercent% OFF</span>
+            </div>
+        </div>
+
+        <hr class="panel-divider" />
+
+        <div class="panel-info-row">
+            <span class="panel-info-label">Coupons left</span>
+            <span class="panel-info-value @(Model.IsUrgent ? "urgent" : "accent")">
+                @(Model.IsSoldOut
+                                ? "Sold out"
+                                : Model.IsUrgent
+                                ? $"Only {Model.RemainingCoupons} left!"
+                                : Model.RemainingCoupons.ToString())
+            </span>
+        </div>
+
+        <div class="panel-info-row">
+            <span class="panel-info-label">Valid until</span>
+            <span class="panel-info-value">@Model.EndDate.ToString("MMM dd, yyyy")</span>
+        </div>
+
+        <div class="panel-info-row">
+            <span class="panel-info-label">Merchant</span>
+            <span class="panel-info-value">@Model.MerchantName</span>
+        </div>
+
+        <hr class="panel-divider" />
+
+        @if (Model.IsSoldOut)
+        {
+            <div class="sold-out-notice">Sold Out</div>
+        }
+        else if (!User.Identity?.IsAuthenticated ?? true)
+        {
+            <div class="panel-actions">
+                <a href="/Account/Login" class="btn btn-primary">Login to Purchase</a>
+                <div class="login-notice">
+                    Don't have an account? <a href="/Account/Register">Register free</a>
+                </div>
+            </div>
+        }
+        else if (User.IsInRole("Customer"))
+        {
+            <div class="panel-actions">
+                <form method="post" asp-controller="Customer" asp-action="Purchase">
+                    <input type="hidden" name="offerId" value="@Model.Id" />
+                    <button type="submit" class="btn btn-primary">
+                        Buy Now — $@Model.DiscountedPrice.ToString("0.00")
+                    </button>
+                </form>
+
+                <form method="post" asp-controller="Customer" asp-action="Reserve">
+                    <input type="hidden" name="offerId" value="@Model.Id" />
+                    <button type="submit" class="btn btn-outline">
+                        Reserve for Later
+                    </button>
+                </form>
+            </div>
+        }
+    </div>
+</div>

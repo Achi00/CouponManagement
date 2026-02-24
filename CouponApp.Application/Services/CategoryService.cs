@@ -66,8 +66,6 @@ namespace CouponApp.Application.Services
 
         public async Task<IEnumerable<CategoryResponse>> GetAllAsync(CancellationToken cancellationToken)
         {
-            _authorization.EnsureAuthenticated();
-
             return await _categoryRepository.GetAllAsync(cancellationToken);
         }
 

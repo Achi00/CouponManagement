@@ -46,7 +46,9 @@ namespace CouponApp.Web.Controllers
         public async Task<IActionResult> Login(LoginViewModel model)
         {
             if (!ModelState.IsValid)
+            {
                 return View(model);
+            }
 
             var user = await _userManager.FindByEmailAsync(model.Email);
 
@@ -65,6 +67,12 @@ namespace CouponApp.Web.Controllers
             if (!user.EmailConfirmed)
             {
                 ModelState.AddModelError("", "Please confirm your email before logging in.");
+                return View(model);
+            }
+
+            if (user.IsBlocked)
+            {
+                ModelState.AddModelError("", "Your account has been blocked.");
                 return View(model);
             }
 
@@ -262,7 +270,5 @@ namespace CouponApp.Web.Controllers
 
             return View("ResetPasswordConfirmation");
         }
-
-
     }
 }
