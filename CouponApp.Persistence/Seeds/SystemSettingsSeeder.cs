@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using CouponApp.Domain.Entity;
 using CouponApp.Persistence.Contexts;
 
-namespace CouponApp.Persistence
+namespace CouponApp.Persistence.Seeds
 {
     public static class SystemSettingsSeeder
     {

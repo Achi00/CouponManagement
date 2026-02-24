@@ -7,8 +7,7 @@
 
         <h2>Create Offer</h2>
 
-        <form asp-action="Create" method="post">
-
+        <form asp-action="Create" method="post" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="form-alert"></div>
 
             <div class="form-group">
@@ -25,37 +24,50 @@
 
             <div class="form-group">
                 <label asp-for="CategoryId"></label>
-                <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.Categories"></select>
+                <select asp-for="CategoryId" class="form-control" asp-items="Model.Categories"> <option value="">-- Select Category --</option></select>
             </div>
 
             <div class="form-group">
                 <label asp-for="OriginalPrice"></label>
                 <input asp-for="OriginalPrice" class="form-control" />
+                <span asp-validation-for="OriginalPrice"></span>
             </div>
 
             <div class="form-group">
                 <label asp-for="DiscountedPrice"></label>
                 <input asp-for="DiscountedPrice" class="form-control" />
+                <span asp-validation-for="DiscountedPrice"></span>
             </div>
 
             <div class="form-group">
                 <label asp-for="TotalCoupons"></label>
                 <input asp-for="TotalCoupons" class="form-control" />
+                <span asp-validation-for="TotalCoupons"></span>
             </div>
 
             <div class="form-group">
                 <label asp-for="StartDate"></label>
                 <input asp-for="StartDate" type="date" class="form-control" />
+                <span asp-validation-for="StartDate"></span>
             </div>
 
             <div class="form-group">
                 <label asp-for="EndDate"></label>
                 <input asp-for="EndDate" type="date" class="form-control" />
+                <span asp-validation-for="EndDate"></span>
             </div>
 
-            <button class="btn btn-primary" style="width:100%">Create Offer</button>
+            <div class="form-group">
+                <label asp-for="ImageFile" class="form-label">Offer Image</label>
+                <input asp-for="ImageFile" type="file" class="form-control" accept="image/*" />
+                <span asp-validation-for="ImageFile"></span>
+            </div>
 
+            <button type="submit" class="btn btn-primary" style="width:100%">Create Offer</button>
         </form>
-
     </div>
 </div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

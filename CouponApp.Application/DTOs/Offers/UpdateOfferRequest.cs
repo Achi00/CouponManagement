@@ -17,5 +17,6 @@
         public DateTime EndDate { get; set; }
 
         public Guid CategoryId { get; set; }
+        public string? ImageUrl { get; set; }
     }
 }

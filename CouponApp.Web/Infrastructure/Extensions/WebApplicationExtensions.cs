@@ -1,5 +1,5 @@
-﻿using CouponApp.Persistence;
-using CouponApp.Persistence.Identity;
+﻿using CouponApp.Persistence.Identity;
+using CouponApp.Persistence.Seeds;
 
 namespace CouponApp.Web.Infrastructure.Extensions
 {
@@ -46,6 +46,7 @@ namespace CouponApp.Web.Infrastructure.Extensions
             using var scope = app.Services.CreateScope();
             await RoleSeeder.SeedAsync(scope.ServiceProvider);
             await app.Services.SeedSystemSettingsAsync();
+            await app.Services.SeedCategoriesAsync();
 
             return app;
         }

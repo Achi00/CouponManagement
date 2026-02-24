@@ -1,5 +1,6 @@
 using CouponApp.Web.Infrastructure.Extensions;
 using CouponApp.Web.Infrastructure.Extensions.Auth;
+using CouponApp.Web.Infrastructure.Extensions.InfrastructureExtensions;
 
 namespace CouponApp.Web
 {
@@ -17,7 +18,9 @@ namespace CouponApp.Web
                 .AddIdentityConfiguration()
                 .AddAuthenticationConfiguration()
                 .AddRepositories()
-                .AddApplicationServices();
+                .AddFactories()
+                .AddApplicationServices()
+                .AddCloudinaryServices(builder.Configuration);
 
             var app = builder.Build();
 

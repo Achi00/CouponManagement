@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using System.ComponentModel.DataAnnotations;
 
-namespace CouponApp.Web.Models.Offer
+namespace CouponApp.Web.Models.Merchant
 {
-    public class CreateOfferViewModel : IValidatableObject
+    public class EditOfferViewModel : IValidatableObject
     {
+        public Guid Id { get; set; }
+
         [Required]
         [Display(Name = "Category")]
         public Guid CategoryId { get; set; }
@@ -25,40 +27,29 @@ namespace CouponApp.Web.Models.Offer
         [Display(Name = "Discounted Price")]
         public decimal DiscountedPrice { get; set; }
 
-        [Range(1, 100000)]
-        [Display(Name = "Total Coupons")]
-        public int TotalCoupons { get; set; }
-
         [DataType(DataType.Date)]
         [Display(Name = "Start Date")]
-        public DateTime StartDate { get; set; } = DateTime.Today;
+        public DateTime StartDate { get; set; }
 
         [DataType(DataType.Date)]
         [Display(Name = "End Date")]
-        public DateTime EndDate { get; set; } = DateTime.Today.AddDays(30);
+        public DateTime EndDate { get; set; }
 
-        [Required(ErrorMessage = "Please upload an image.")]
-        public IFormFile ImageFile { get; set; }
-
-        public string? ImageUrl { get; set; }
-
-        public IEnumerable<SelectListItem> Categories { get; set; } = Enumerable.Empty<SelectListItem>();
+        public string? ExistingImageUrl { get; set; }
+        public IFormFile? NewImageFile { get; set; }
+        public IEnumerable<SelectListItem> Categories { get; set; } = new List<SelectListItem>();
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             if (DiscountedPrice >= OriginalPrice)
-            {
                 yield return new ValidationResult(
                     "Discounted price must be lower than original price",
                     new[] { nameof(DiscountedPrice) });
-            }
 
             if (EndDate <= StartDate)
-            {
                 yield return new ValidationResult(
                     "End date must be after start date",
                     new[] { nameof(EndDate) });
-            }
         }
     }
 }

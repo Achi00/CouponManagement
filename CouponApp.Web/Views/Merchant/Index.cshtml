@@ -8,7 +8,9 @@
 </div>
 
 <div style="margin-bottom:20px">
-    <a href="/Merchant/CreateOffer" class="btn btn-primary">Create Offer</a>
+    <a asp-action="Create" class="btn btn-primary">
+        Create Offer
+    </a>
 </div>
 
 @if (!Model.Any())
@@ -31,8 +33,13 @@ else
                 <p class="muted">$@offer.DiscountedPrice</p>
 
                 <div style="margin-top:10px">
-                    <a href="/Merchant/Edit/@offer.Id" class="btn btn-outline">Edit</a>
-                    <a href="/Merchant/Delete/@offer.Id" class="btn btn-danger">Delete</a>
+                    <a asp-action="Edit" asp-route-id="@offer.Id" class="btn btn-outline">Edit</a>
+                    <form asp-action="Delete" asp-route-id="@offer.Id" method="post" style="display:inline">
+                        <button class="btn btn-danger"
+                                onclick="return confirm('Delete this offer?')">
+                            Delete
+                        </button>
+                    </form>
                 </div>
             </div>
         }
