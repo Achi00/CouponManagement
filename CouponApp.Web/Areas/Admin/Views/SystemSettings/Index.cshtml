@@ -1,0 +1,27 @@
+﻿@using CouponApp.Web.Areas.Admin.ViewModels
+
+@model SystemSettingsViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>System Settings</h2>
+
+<form method="post">
+
+    <div class="mb-3">
+        <label asp-for="ReservationDurationMinutes"></label>
+        <input asp-for="ReservationDurationMinutes" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="MerchantEditPeriodHours"></label>
+        <input asp-for="MerchantEditPeriodHours" class="form-control" />
+    </div>
+
+    <button class="btn btn-primary">
+        Save
+    </button>
+
+</form>

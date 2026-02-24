@@ -2,12 +2,17 @@
 
 @model List<AdminOfferViewModel>
 
-<h2>Pending Offers</h2>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
 
-<table class="table">
-    <thead>
+<h2 class="mb-4">Pending Offers</h2>
+
+<table class="table table-hover align-middle">
+
+    <thead class="table-light">
         <tr>
-            <th>Title</th>
+            <th>Offer</th>
             <th>Merchant</th>
             <th>Category</th>
             <th>Price</th>
@@ -16,28 +21,101 @@
     </thead>
 
     <tbody>
+
         @foreach (var offer in Model)
         {
             <tr>
-                <td>@offer.Title</td>
-                <td>@offer.MerchantName</td>
-                <td>@offer.CategoryName</td>
-                <td>@offer.DiscountedPrice</td>
-                <td>
 
-                    <form asp-action="Approve" method="post">
+                <td>
+                    <strong>@offer.Title</strong><br />
+                    <small class="text-muted">
+                        Submitted @offer.CreatedAt.ToShortDateString()
+                    </small>
+                </td>
+
+                <td>@offer.MerchantName</td>
+
+                <td>
+                    <span class="badge bg-secondary">
+                        @offer.CategoryName
+                    </span>
+                </td>
+
+                <td>
+                    <span class="text-decoration-line-through text-muted">
+                        @offer.OriginalPrice
+                    </span>
+                    <strong class="text-success">
+                        @offer.DiscountedPrice
+                    </strong>
+                </td>
+
+                <td style="width:280px">
+                    <button class="btn btn-outline-secondary btn-sm"
+                            data-bs-toggle="modal"
+                            data-bs-target="#offerModal-@offer.Id">
+                        View
+                    </button>
+
+                    <form asp-action="Approve" method="post" class="d-inline">
                         <input type="hidden" name="id" value="@offer.Id" />
-                        <button class="btn btn-success">Approve</button>
+                        <button class="btn btn-success btn-sm">
+                            Approve
+                        </button>
                     </form>
 
-                    <form asp-action="Reject" method="post">
+                    <form asp-action="Reject" method="post" class="d-inline-flex gap-2">
+
                         <input type="hidden" name="id" value="@offer.Id" />
-                        <input name="reason" placeholder="Reason" />
-                        <button class="btn btn-danger">Reject</button>
+
+                        <input name="reason"
+                               class="form-control form-control-sm"
+                               placeholder="Reason"
+                               required />
+
+                        <button class="btn btn-danger btn-sm">
+                            Reject
+                        </button>
+
                     </form>
 
                 </td>
+
             </tr>
+            <div class="modal fade" id="offerModal-@offer.Id" tabindex="-1">
+
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+
+                        <div class="modal-header">
+                            <h5 class="modal-title">@offer.Title</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+
+                        <div class="modal-body">
+
+                            <p><strong>Merchant:</strong> @offer.MerchantName</p>
+
+                            <p><strong>Category:</strong> @offer.CategoryName</p>
+
+                            <p><strong>Description</strong></p>
+
+                            <p>@offer.Description</p>
+
+                            <p>
+                                Original: <s>@offer.OriginalPrice</s>
+                                <br>
+                                Discounted: <strong>@offer.DiscountedPrice</strong>
+                            </p>
+
+                            <p>Remaining coupons: @offer.RemainingCoupons</p>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
         }
+
     </tbody>
 </table>

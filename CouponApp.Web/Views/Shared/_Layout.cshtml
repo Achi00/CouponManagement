@@ -283,7 +283,11 @@
             {
                 @if (User.IsInRole("Admin"))
                 {
-                    <li><a href="/Admin">Admin Panel</a></li>
+                    <li>
+                        <a asp-area="Admin" asp-controller="Dashboard" asp-action="Index">
+                            Admin Panel
+                        </a>
+                    </li>
                 }
                 @if (User.IsInRole("Merchant"))
                 {

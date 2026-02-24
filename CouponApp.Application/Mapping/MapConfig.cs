@@ -1,9 +1,10 @@
-﻿using Mapster;
+﻿using CouponApp.Application.DTOs.Admin;
 using CouponApp.Application.DTOs.Coupons;
 using CouponApp.Application.DTOs.Offers;
 using CouponApp.Application.DTOs.Product;
 using CouponApp.Application.DTOs.Reservations;
 using CouponApp.Domain.Entity;
+using Mapster;
 
 namespace CouponApp.Application.Mapping
 {
@@ -25,6 +26,10 @@ namespace CouponApp.Application.Mapping
 
             config.NewConfig<Reservation, ReservationResponse>()
                 .Map(dest => dest.OfferTitle, src => src.Offer.Title);
+
+            config.NewConfig<Offer, AdminOfferResponse>()
+                .Map(dest => dest.MerchantName, src => src.Merchant.BusinessName)
+                .Map(dest => dest.CategoryName, src => src.Category.Name);
         }
     }
 }

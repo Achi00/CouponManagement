@@ -1,20 +1,23 @@
-﻿using Mapster;
-using Microsoft.EntityFrameworkCore;
+﻿using CouponApp.Application.DTOs.Admin;
 using CouponApp.Application.DTOs.Offers;
 using CouponApp.Application.Interfaces.Repositories;
 using CouponApp.Domain.Entity;
 using CouponApp.Domain.Enums;
 using CouponApp.Persistence.Contexts;
+using Mapster;
+using Microsoft.EntityFrameworkCore;
 
 namespace CouponApp.Infrastructure.Repositories.Offers
 {
     public class OfferRepository : IOfferRepository
     {
         private readonly DiscountManagementContext _context;
+        private readonly TypeAdapterConfig _config;
 
-        public OfferRepository(DiscountManagementContext context)
+        public OfferRepository(DiscountManagementContext context, TypeAdapterConfig config)
         {
             _context = context;
+            _config = config;
         }
         public void Add(Offer entity)
         {
@@ -77,12 +80,12 @@ namespace CouponApp.Infrastructure.Repositories.Offers
             return await _context.Offers.FirstOrDefaultAsync(o => o.Id == id, cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task<List<OfferResponse>> GetPendingAsync(CancellationToken cancellationToken)
+        public async Task<List<AdminOfferResponse>> GetPendingAsync(CancellationToken cancellationToken)
         {
             return await _context.Offers
                 .AsNoTracking()
                 .Where(o => o.Status == OfferStatus.Pending)
-                .ProjectToType<OfferResponse>()
+                .ProjectToType<AdminOfferResponse>(_config)
                 .ToListAsync(cancellationToken)
                 .ConfigureAwait(false);
         }

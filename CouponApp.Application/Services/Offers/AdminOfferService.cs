@@ -1,4 +1,5 @@
-﻿using CouponApp.Application.DTOs.Offers;
+﻿using CouponApp.Application.DTOs.Admin;
+using CouponApp.Application.DTOs.Offers;
 using CouponApp.Application.Exceptions;
 using CouponApp.Application.Interfaces;
 using CouponApp.Application.Interfaces.Repositories;
@@ -41,7 +42,7 @@ namespace CouponApp.Application.Services.Offers
             await _unitOfWork.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task<IReadOnlyList<OfferResponse>> GetPendingAsync(CancellationToken cancellationToken)
+        public async Task<IReadOnlyList<AdminOfferResponse>> GetPendingAsync(CancellationToken cancellationToken)
         {
             _authorization.EnsureRole(UserRole.Admin);
 

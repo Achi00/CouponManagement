@@ -1,10 +1,11 @@
-﻿using CouponApp.Application.DTOs.Offers;
+﻿using CouponApp.Application.DTOs.Admin;
+using CouponApp.Application.DTOs.Offers;
 
 namespace CouponApp.Application.Interfaces.Sercives.Offer
 {
     public interface IAdminOfferService
     {
-        Task<IReadOnlyList<OfferResponse>> GetPendingAsync(CancellationToken ct);
+        Task<IReadOnlyList<AdminOfferResponse>> GetPendingAsync(CancellationToken ct);
 
         Task ApproveAsync(Guid offerId, CancellationToken ct);
 

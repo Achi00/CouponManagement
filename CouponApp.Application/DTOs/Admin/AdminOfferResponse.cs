@@ -1,6 +1,6 @@
-﻿namespace CouponApp.Web.Areas.Admin.ViewModels
+﻿namespace CouponApp.Application.DTOs.Admin
 {
-    public class AdminOfferViewModel
+    public class AdminOfferResponse
     {
         public Guid Id { get; set; }
 
@@ -14,10 +14,10 @@
 
         public decimal DiscountedPrice { get; set; }
 
-        public int RemainingCoupons { get; set; }
-
         public DateTime CreatedAt { get; set; }
 
         public string Description { get; set; }
+
+        public int RemainingCoupons { get; set; }
     }
 }

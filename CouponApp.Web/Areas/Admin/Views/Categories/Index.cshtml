@@ -1,0 +1,27 @@
+﻿@using CouponApp.Web.Areas.Admin.ViewModels
+@model List<CategoryViewModel>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Categories</h2>
+
+<a asp-action="Create" class="btn btn-primary mb-3">Add Category</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var c in Model)
+        {
+            <tr>
+                <td>@c.Name</td>
+            </tr>
+        }
+    </tbody>
+</table>
