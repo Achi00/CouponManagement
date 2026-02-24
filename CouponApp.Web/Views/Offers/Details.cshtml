@@ -1,0 +1,43 @@
+﻿@using CouponApp.Web.Models.Offer
+
+@model OfferDetailsViewModel
+
+<h2>@Model.Title</h2>
+
+<p>@Model.Description</p>
+
+<p>
+    <s>@Model.OriginalPrice</s>
+    <strong>@Model.DiscountedPrice</strong>
+</p>
+
+<p>
+    Merchant: @Model.MerchantName
+</p>
+
+<p>
+    Remaining coupons: @Model.RemainingCoupons
+</p>
+
+@if (User.Identity.IsAuthenticated)
+{
+    <form asp-controller="Reservations"
+          asp-action="Reserve"
+          method="post">
+
+        <input type="hidden" name="offerId" value="@Model.Id" />
+
+        <button class="btn btn-success">
+            Get Coupon
+        </button>
+
+    </form>
+}
+else
+{
+    <a asp-controller="Account"
+       asp-action="Login"
+       class="btn btn-primary">
+        Login to buy
+    </a>
+}

@@ -1,0 +1,42 @@
+﻿@using CouponApp.Web.Models.Reservation
+
+@model List<ReservationViewModel>
+
+<h2>My Reservations</h2>
+
+<table class="table">
+
+    <tr>
+        <th>Offer</th>
+        <th>Price</th>
+        <th>Expires</th>
+        <th></th>
+    </tr>
+
+    @foreach (var r in Model)
+    {
+        <tr>
+
+            <td>@r.OfferTitle</td>
+
+            <td>@r.Price</td>
+
+            <td>@r.ExpiresAt.ToLocalTime()</td>
+
+            <td>
+
+                <form asp-action="Cancel" method="post">
+                    <input type="hidden" name="id" value="@r.Id" />
+
+                    <button class="btn btn-danger btn-sm">
+                        Cancel
+                    </button>
+
+                </form>
+
+            </td>
+
+        </tr>
+    }
+
+</table>

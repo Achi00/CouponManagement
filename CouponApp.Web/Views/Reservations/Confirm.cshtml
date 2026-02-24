@@ -1,0 +1,22 @@
+﻿@using CouponApp.Web.Models.Reservation
+@model ReservationViewModel
+
+<h2>Confirm Purchase</h2>
+
+<p>
+    Offer: @Model.OfferTitle
+</p>
+
+<p>
+    Reservation expires at: @Model.ExpiresAt
+</p>
+
+<form asp-action="ConfirmPurchase" method="post">
+
+    <input type="hidden" name="id" value="@Model.Id" />
+
+    <button class="btn btn-success">
+        Confirm
+    </button>
+
+</form>

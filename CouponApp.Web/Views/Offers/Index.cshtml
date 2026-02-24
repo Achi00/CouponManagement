@@ -1,0 +1,37 @@
+﻿@using CouponApp.Web.Models.Offer
+
+@model List<OfferListItemViewModel>
+
+<h2>Deals</h2>
+
+<div class="row">
+
+    @foreach (var offer in Model)
+    {
+        <div class="col-md-4 mb-4">
+
+            <div class="card h-100 shadow-sm">
+
+                <div class="card-body">
+
+                    <h5>@offer.Title</h5>
+
+                    <p>
+                        <s>@offer.OriginalPrice</s>
+                        <strong>@offer.DiscountedPrice</strong>
+                    </p>
+
+                    <a asp-action="Details"
+                       asp-route-id="@offer.Id"
+                       class="btn btn-primary">
+                        View Deal
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+    }
+
+</div>

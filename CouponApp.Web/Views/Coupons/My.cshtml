@@ -1,0 +1,32 @@
+﻿@using CouponApp.Web.Models.Coupon
+
+@model List<CouponViewModel>
+
+<h2>My Coupons</h2>
+
+<table class="table">
+
+    <tr>
+        <th>Offer</th>
+        <th>Code</th>
+        <th>Status</th>
+    </tr>
+
+    @foreach (var coupon in Model)
+    {
+        <tr>
+
+            <td>@coupon.OfferTitle</td>
+
+            <td>
+                <span class="badge bg-dark">
+                    @coupon.Code
+                </span>
+            </td>
+
+            <td>@coupon.Status</td>
+
+        </tr>
+    }
+
+</table>
