@@ -25,6 +25,12 @@ namespace CouponApp.Infrastructure.BackgroundJobs
                     using var scope = _scopeFactory.CreateScope();
                     var reservationService = scope.ServiceProvider.GetRequiredService<IReservationService>();
                     await reservationService.CancelExpiredAsync(stoppingToken);
+                    _logger.LogInformation("Expired reservations cleaned up at {Time}", DateTime.UtcNow);
+                }
+                catch (OperationCanceledException)
+                {
+                    // shutdown requested, exit here
+                    break; 
                 }
                 catch (Exception ex)
                 {
