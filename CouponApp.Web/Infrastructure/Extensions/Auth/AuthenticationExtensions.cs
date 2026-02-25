@@ -19,6 +19,7 @@ namespace CouponApp.Web.Infrastructure.Extensions.Auth
 
             services.ConfigureApplicationCookie(options =>
             {
+                options.LoginPath = "/Account/Login";
                 options.AccessDeniedPath = "/Account/AccessDenied";
             });
 

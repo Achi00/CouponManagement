@@ -15,29 +15,56 @@
     Merchant: @Model.MerchantName
 </p>
 
-<p>
-    Remaining coupons: @Model.RemainingCoupons
-</p>
+@if (Model.RemainingCoupons == 0)
+{
+    <button class="btn btn-secondary" disabled>
+        Sold Out
+    </button>
+}
+else
+{
+    <p>
+        Remaining coupons: @Model.RemainingCoupons
+    </p>
+}
+
 
 @if (User.Identity.IsAuthenticated)
 {
-    <form asp-controller="Reservations"
-          asp-action="Reserve"
-          method="post">
+    <div class="d-flex gap-2">
 
-        <input type="hidden" name="offerId" value="@Model.Id" />
+        <form asp-controller="Reservations"
+              asp-action="Create"
+              method="post">
 
-        <button class="btn btn-success">
-            Get Coupon
-        </button>
+            <input type="hidden" name="offerId" value="@Model.Id" />
 
-    </form>
+            <button class="btn btn-outline-primary">
+                Reserve
+            </button>
+
+        </form>
+
+        <form asp-controller="Coupons"
+              asp-action="Purchase"
+              method="post">
+
+            <input type="hidden" name="offerId" value="@Model.Id" />
+
+            <button class="btn btn-success">
+                Buy Now
+            </button>
+
+        </form>
+
+    </div>
 }
 else
 {
     <a asp-controller="Account"
        asp-action="Login"
+       asp-route-returnUrl="@Context.Request.Path"
        class="btn btn-primary">
-        Login to buy
+        Login to continue
     </a>
 }

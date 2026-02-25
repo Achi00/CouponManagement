@@ -1,10 +1,12 @@
-﻿namespace CouponApp.Application.Exceptions
-{
-    public class MerchantProfileMissingException : Exception
-    {
-        public MerchantProfileMissingException() : base("Merchant profile does not exist")
-        {
+﻿using Microsoft.AspNetCore.Http;
 
+namespace CouponApp.Application.Exceptions
+{
+    public class MerchantProfileMissingException : AppException
+    {
+        public MerchantProfileMissingException()
+            : base("Merchant profile required", StatusCodes.Status403Forbidden)
+        {
         }
     }
 }

@@ -17,7 +17,7 @@ namespace CouponApp.Application.Services.Auth
         {
             if (!_currentUser.IsAuthenticated)
             {
-                throw new NotAuthenticatedException("User is not authenticated");
+                throw new NotAuthenticatedException();
             }
         }
 

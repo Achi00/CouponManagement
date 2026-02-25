@@ -1,6 +1,9 @@
 using CouponApp.Application.Interfaces.Sercives;
 using CouponApp.Application.Interfaces.Sercives.Offer;
 using CouponApp.Web.Models.Home;
+using CouponApp.Web.Models.Offer;
+using Mapster;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CouponApp.Web.Controllers
@@ -21,15 +24,17 @@ namespace CouponApp.Web.Controllers
             var offers = await _offerService.GetApprovedAsync(cancellationToken);
             var categories = await _categoryService.GetAllAsync(cancellationToken);
 
+            var offerModel = offers.Adapt<List<OfferCardViewModel>>();
+
             var model = new HomeViewModel
             {
-                Offers = offers,
+                Offers = offerModel,
                 Categories = categories
             };
 
             return View(model);
         }
-
+        [Authorize]
         public async Task<IActionResult> Details(Guid id, CancellationToken cancellationToken)
         {
             var offer = await _offerService.GetDetailsAsync(id, cancellationToken);

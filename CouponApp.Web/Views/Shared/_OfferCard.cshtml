@@ -1,0 +1,72 @@
+﻿@using CouponApp.Web.Models.Offer
+@model OfferCardViewModel
+
+@{
+    var discount = (int)Math.Round((1 - Model.DiscountedPrice / Model.OriginalPrice) * 100);
+    var isUrgent = Model.RemainingCoupons <= 5 && Model.RemainingCoupons > 0;
+    var isSoldOut = Model.RemainingCoupons <= 0;
+    var daysLeft = (Model.EndDate - DateTime.UtcNow).Days;
+}
+
+<div class="offer-card">
+    <div class="offer-card-body">
+        <div class="offer-card-top">
+            <div class="offer-title">@Model.Title</div>
+            <div class="discount-badge">-@discount%</div>
+        </div>
+
+        <div class="offer-pricing">
+            <span class="price-new">$@Model.DiscountedPrice.ToString("0.00")</span>
+            <span class="price-old">$@Model.OriginalPrice.ToString("0.00")</span>
+        </div>
+
+        <div class="offer-meta">
+            <span class="offer-meta-item @(isUrgent ? "urgent" : "")">
+                @if (isSoldOut)
+                {
+                    <span>Sold out</span>
+                }
+                else if (isUrgent)
+                {
+                    <span>⚡ Only @Model.RemainingCoupons left</span>
+                }
+                else
+                {
+                    <span>@Model.RemainingCoupons available</span>
+                }
+            </span>
+
+            <span class="offer-meta-item">
+                @if (daysLeft <= 0)
+                {
+                    <span style="color: #f44336">Expired</span>
+                }
+                else if (daysLeft == 1)
+                {
+                    <span style="color: var(--accent2)">Last day!</span>
+                }
+                else
+                {
+                    <span>@daysLeft days left</span>
+                }
+            </span>
+        </div>
+    </div>
+
+    <div class="offer-card-footer">
+        @if (isSoldOut)
+        {
+            <div class="sold-out-bar">Sold Out</div>
+        }
+        else
+        {
+            <a asp-controller="Offers"
+               asp-action="Details"
+               asp-route-id="@Model.Id"
+               class="btn btn-primary"
+               style="width:100%; justify-content:center">
+                View Deal →
+            </a>
+        }
+    </div>
+</div>

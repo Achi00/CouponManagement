@@ -25,14 +25,34 @@
 
             <td>
 
-                <form asp-action="Cancel" method="post">
-                    <input type="hidden" name="id" value="@r.Id" />
+                <div class="d-flex gap-2">
 
-                    <button class="btn btn-danger btn-sm">
-                        Cancel
-                    </button>
+                    <form asp-controller="Reservations"
+                          asp-action="PurchaseFromReservation"
+                          method="post">
+                        <input type="hidden"
+                               name="reservationId"
+                               value="@r.Id" />
 
-                </form>
+                        <button class="btn btn-success btn-sm">
+                            Convert to Coupon
+                        </button>
+
+                    </form>
+
+                    <form asp-action="Cancel" method="post">
+
+                        <input type="hidden"
+                               name="id"
+                               value="@r.Id" />
+
+                        <button class="btn btn-danger btn-sm">
+                            Cancel
+                        </button>
+
+                    </form>
+
+                </div>
 
             </td>
 

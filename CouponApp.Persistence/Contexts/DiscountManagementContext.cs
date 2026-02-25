@@ -18,6 +18,7 @@ namespace CouponApp.Persistence.Contexts
         public DbSet<Coupon> Coupons { get; set; }
         public DbSet<Reservation> Reservations { get; set; }
         public DbSet<SystemSetting> SystemSettings { get; set; }
+        public DbSet<ErrorLog> ErrorLogs { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

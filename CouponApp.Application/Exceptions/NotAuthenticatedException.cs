@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Http;
 
 namespace CouponApp.Application.Exceptions
 {
-    public class NotAuthenticatedException : Exception
+    public class NotAuthenticatedException : AppException
     {
-        public NotAuthenticatedException(string? message) : base(message)
+        public NotAuthenticatedException()
+            : base("User is not authenticated", StatusCodes.Status401Unauthorized)
         {
         }
     }

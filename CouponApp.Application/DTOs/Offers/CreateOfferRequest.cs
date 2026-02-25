@@ -11,6 +11,7 @@
         public decimal DiscountedPrice { get; set; }
 
         public int TotalCoupons { get; set; }
+        public int RemainingCoupons { get; set; }
 
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }

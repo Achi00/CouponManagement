@@ -288,68 +288,7 @@ else
     <div class="offers-grid">
         @foreach (var offer in Model.Offers)
         {
-            var discount = (int)Math.Round((1 - offer.DiscountedPrice / offer.OriginalPrice) * 100);
-            var isUrgent = offer.RemainingCoupons <= 5 && offer.RemainingCoupons > 0;
-            var isSoldOut = offer.RemainingCoupons <= 0;
-            var daysLeft = (offer.EndDate - DateTime.UtcNow).Days;
-
-            <div class="offer-card">
-                <div class="offer-card-body">
-                    <div class="offer-card-top">
-                        <div class="offer-title">@offer.Title</div>
-                        <div class="discount-badge">-@discount%</div>
-                    </div>
-
-                    <div class="offer-pricing">
-                        <span class="price-new">$@offer.DiscountedPrice.ToString("0.00")</span>
-                        <span class="price-old">$@offer.OriginalPrice.ToString("0.00")</span>
-                    </div>
-
-                    <div class="offer-meta">
-                        <span class="offer-meta-item @(isUrgent ? "urgent" : "")">
-                            @if (isSoldOut)
-                            {
-                                <span>Sold out</span>
-                            }
-                            else if (isUrgent)
-                            {
-                                <span>⚡ Only @offer.RemainingCoupons left</span>
-                            }
-                            else
-                            {
-                                <span>@offer.RemainingCoupons available</span>
-                            }
-                        </span>
-                        <span class="offer-meta-item">
-                            @if (daysLeft <= 0)
-                            {
-                                <span style="color: #f44336">Expired</span>
-                            }
-                            else if (daysLeft == 1)
-                            {
-                                <span style="color: var(--accent2)">Last day!</span>
-                            }
-                            else
-                            {
-                                <span>@daysLeft days left</span>
-                            }
-                        </span>
-                    </div>
-                </div>
-
-                <div class="offer-card-footer">
-                    @if (isSoldOut)
-                    {
-                        <div class="sold-out-bar">Sold Out</div>
-                    }
-                    else
-                    {
-                        <a href="/Home/Details/@offer.Id" class="btn btn-primary" style="width:100%; justify-content:center">
-                            View Deal →
-                        </a>
-                    }
-                </div>
-            </div>
+            <partial name="_OfferCard" model="offer" />
         }
     </div>
 }

@@ -11,6 +11,14 @@ namespace CouponApp.Web.Attributes
         {
             if (context.HttpContext.User.Identity?.IsAuthenticated == true)
             {
+                var returnUrl = context.HttpContext.Request.Query["ReturnUrl"].ToString();
+
+                if (!string.IsNullOrEmpty(returnUrl))
+                {
+                    context.Result = new RedirectResult(returnUrl);
+                    return;
+                }
+
                 context.Result = new RedirectToActionResult("Index", "Home", null);
             }
         }

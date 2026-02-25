@@ -33,11 +33,12 @@ namespace CouponApp.Web.Controllers
         // login
         [HttpGet]
         [RedirectIfAuthenticated]
-        public IActionResult Login(string? email)
+        public IActionResult Login(string? email, string? returnUrl = null)
         {
             var model = new LoginViewModel
             {
-                Email = email
+                Email = email,
+                ReturnUrl = returnUrl
             };
             return View(model);
         }
@@ -77,6 +78,11 @@ namespace CouponApp.Web.Controllers
             }
 
             await _signInManager.SignInAsync(user, model.RememberMe);
+
+            if (!string.IsNullOrEmpty(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))
+            {
+                return Redirect(model.ReturnUrl);
+            }
 
             return RedirectToAction("Index", "Home");
         }
@@ -212,8 +218,8 @@ namespace CouponApp.Web.Controllers
             return View("OperationResult", new OperationResultViewModel
             {
                 Success = true,
-                Title = "Password reset successful",
-                Message = "Your password has been updated.",
+                Title = "Password reset Created successful",
+                Message = "Check your email to be able to reset password",
                 RedirectAction = "Login",
                 RedirectController = "Account",
                 RedirectText = "Go to login"

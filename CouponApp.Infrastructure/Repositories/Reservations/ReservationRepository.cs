@@ -24,6 +24,16 @@ namespace CouponApp.Infrastructure.Repositories.Reservations
             _context.Reservations.Remove(entity);
         }
 
+        public async Task<Reservation?> GetActiveByUserAndOfferAsync(Guid userId, Guid offerId, CancellationToken cancellationToken)
+        {
+            return await _context.Reservations
+                .Where(r =>
+                    r.UserId == userId &&
+                    r.OfferId == offerId &&
+                    r.ExpiresAt > DateTime.UtcNow)
+                .FirstOrDefaultAsync(cancellationToken);
+        }
+
         public async Task<List<Reservation>> GetActiveByUserIdAsync(Guid userId, CancellationToken cancellationToken)
         {
             return await _context.Reservations

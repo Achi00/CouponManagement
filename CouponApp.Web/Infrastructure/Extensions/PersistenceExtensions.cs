@@ -1,6 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using CouponApp.Application.Interfaces.Logger;
 using CouponApp.Persistence;
 using CouponApp.Persistence.Contexts;
+using CouponApp.Persistence.Logger;
+using Microsoft.EntityFrameworkCore;
 
 namespace CouponApp.Web.Infrastructure.Extensions
 {
@@ -11,6 +13,8 @@ namespace CouponApp.Web.Infrastructure.Extensions
             services.AddDbContext<DiscountManagementContext>(options =>
                 options.UseSqlServer(
                     configuration.GetConnectionString(nameof(ConnectionString.DefaultConnection))));
+
+            services.AddScoped<IErrorLogger, DbErrorLogger>();
 
             return services;
         }

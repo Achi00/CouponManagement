@@ -1,8 +1,11 @@
-﻿namespace CouponApp.Application.Exceptions
+﻿using Microsoft.AspNetCore.Http;
+
+namespace CouponApp.Application.Exceptions
 {
-    public class BusinessException : Exception
+    public class BusinessException : AppException
     {
-        public BusinessException(string? message) : base(message)
+        public BusinessException(string message)
+            : base(message, StatusCodes.Status400BadRequest)
         {
         }
     }

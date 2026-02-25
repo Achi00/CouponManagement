@@ -84,8 +84,7 @@ namespace CouponApp.Application.Services
                     throw new BusinessException("No coupons available");
                 }
 
-                var activeReservations = await _reservationRepository.GetActiveByUserIdAsync(userId, cancellationToken);
-                var existingReservation = activeReservations.FirstOrDefault(r => r.OfferId == offerId);
+                var existingReservation = await _reservationRepository.GetActiveByUserAndOfferAsync(userId, offerId, cancellationToken);
 
                 Coupon coupon;
 

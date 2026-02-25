@@ -7,8 +7,6 @@ using CouponApp.Application.Interfaces.Sercives.Offer;
 using CouponApp.Domain.Entity;
 using CouponApp.Domain.Enums;
 using Mapster;
-using System.Net;
-using System.Threading;
 
 namespace CouponApp.Application.Services.Offers
 {
@@ -50,6 +48,7 @@ namespace CouponApp.Application.Services.Offers
             offer.CreatedAt = DateTime.UtcNow;
             offer.Status = OfferStatus.Pending;
             offer.MerchantId = merchant.Id;
+            offer.RemainingCoupons = dto.TotalCoupons;
 
             _offerRepository.Add(offer);
 
@@ -85,28 +84,13 @@ namespace CouponApp.Application.Services.Offers
             await _unitOfWork.SaveChangesAsync(cancellationToken);
         }
 
+        // get list of approved offers
         public async Task<IReadOnlyList<OfferResponse>> GetApprovedAsync(CancellationToken cancellationToken)
         {
             return await _offerRepository.GetApprovedAsync(cancellationToken);
         }
 
         public async Task<IReadOnlyList<OfferResponse>> GetByMerchantAsync(CancellationToken cancellationToken)
-        {
-            _authorization.EnsureRole(UserRole.Merchant);
-
-            var userId = _currentUser.UserId!.Value;
-
-            var merchant = await _merchantRepository.GetByUserIdAsync(userId, cancellationToken);
-
-            if (merchant == null)
-            {
-                throw new MerchantProfileMissingException();
-            }
-
-            return await _offerRepository.GetByMerchantIdAsync(merchant.Id, cancellationToken);
-        }
-
-        public async Task<List<OfferResponse>> GetByMerchantsAsync(CancellationToken cancellationToken)
         {
             _authorization.EnsureRole(UserRole.Merchant);
 
