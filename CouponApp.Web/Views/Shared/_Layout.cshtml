@@ -313,8 +313,13 @@
                 {
                     <li><a href="/Merchant/CreateProfile">Become a Merchant</a></li>
                 }
-                <a asp-controller="Coupons" asp-action="My">My Coupons</a>
-                <a asp-controller="Reservations" asp-action="My">My Reservations</a>
+                
+                @if (!User.IsInRole("Admin"))
+                {
+                    <a asp-controller="Coupons" asp-action="My">My Coupons</a>
+                    <a asp-controller="Reservations" asp-action="My">My Reservations</a>
+                }
+                    
                 <li>
                     <form asp-controller="Account" asp-action="Logout" method="post" style="display:inline">
                         <button type="submit" class="btn btn-outline" style="cursor:pointer">Logout</button>

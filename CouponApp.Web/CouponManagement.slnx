@@ -10,6 +10,7 @@
   </Folder>
 
   <Folder Name="/Presentation/">
+    <Project Path="../CouponApp.API/CouponApp.API.csproj" Id="98071bbf-6b45-4fd1-8aaf-fc62bfe8513c" />
     <Project Path="CouponApp.Web.csproj" />
   </Folder>
 </Solution>

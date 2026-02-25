@@ -1,5 +1,6 @@
 ﻿using CouponApp.Application.DTOs.Admin;
 using CouponApp.Application.DTOs.Offers;
+using CouponApp.Application.DTOs.Search;
 using CouponApp.Application.Interfaces.Repositories;
 using CouponApp.Domain.Entity;
 using CouponApp.Domain.Enums;
@@ -29,12 +30,21 @@ namespace CouponApp.Infrastructure.Repositories.Offers
             _context.Offers.Remove(entity);
         }
 
-        public async Task<List<OfferResponse>> GetApprovedAsync(CancellationToken cancellationToken)
+        public async Task<List<OfferResponse>> GetApprovedAsync(OfferFilterQuery filter, CancellationToken cancellationToken)
         {
-            return await _context.Offers
+            var query = _context.Offers
                 .Include(o => o.Category)
                 .AsNoTracking()
-                .Where(o => o.Status == OfferStatus.Approved)
+                .Where(o => o.Status == OfferStatus.Approved);
+
+            if (!string.IsNullOrWhiteSpace(filter.SearchQuery))
+                query = query.Where(o => o.Title.Contains(filter.SearchQuery) ||
+                                          o.Description.Contains(filter.SearchQuery));
+
+            if (filter.SelectedCategoryId.HasValue)
+                query = query.Where(o => o.CategoryId == filter.SelectedCategoryId.Value);
+
+            return await query
                 .ProjectToType<OfferResponse>()
                 .ToListAsync(cancellationToken)
                 .ConfigureAwait(false);

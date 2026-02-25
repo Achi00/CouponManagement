@@ -1,12 +1,13 @@
 ﻿using CouponApp.Application.DTOs.Admin;
 using CouponApp.Application.DTOs.Offers;
+using CouponApp.Application.DTOs.Search;
 using CouponApp.Domain.Entity;
 
 namespace CouponApp.Application.Interfaces.Repositories
 {
     public interface IOfferRepository : IBaseRepository<Offer>
     {
-        Task<List<OfferResponse>> GetApprovedAsync(CancellationToken cancellationToken);
+        Task<List<OfferResponse>> GetApprovedAsync(OfferFilterQuery filter, CancellationToken cancellationToken);
         Task<List<AdminOfferResponse>> GetPendingAsync(CancellationToken cancellationToken);
         Task<List<OfferResponse>> GetByMerchantIdAsync(Guid merchantId, CancellationToken cancellationToken);
         Task<int> GetActiveCountByMerchantIdAsync(Guid merchantId, CancellationToken cancellationToken);

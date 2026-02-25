@@ -263,7 +263,7 @@
             <a href="/" class="pill @(Model.SelectedCategoryId == null ? "active" : "")">All</a>
             @foreach (var cat in Model.Categories)
             {
-                <a href="?categoryId=@cat.Id" class="pill @(Model.SelectedCategoryId == cat.Id ? "active" : "")">
+                <a href="?SelectedCategoryId=@cat.Id&SearchQuery=@Model.SearchQuery" class="pill @(Model.SelectedCategoryId == cat.Id ? "active" : "")">
                     @cat.Name
                 </a>
             }

@@ -218,7 +218,7 @@ namespace CouponApp.Web.Controllers
             return View("OperationResult", new OperationResultViewModel
             {
                 Success = true,
-                Title = "Password reset Created successful",
+                Title = "Password reset token was Created successful",
                 Message = "Check your email to be able to reset password",
                 RedirectAction = "Login",
                 RedirectController = "Account",

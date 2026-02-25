@@ -34,13 +34,14 @@
                                name="reservationId"
                                value="@r.Id" />
 
+                        <p>@r.Id</p>
                         <button class="btn btn-success btn-sm">
                             Convert to Coupon
                         </button>
 
                     </form>
 
-                    <form asp-action="Cancel" method="post">
+                    <form asp-controller="Reservations" asp-action="Cancel" method="post">
 
                         <input type="hidden"
                                name="id"

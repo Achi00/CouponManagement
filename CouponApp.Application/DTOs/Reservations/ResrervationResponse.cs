@@ -2,7 +2,7 @@
 {
     public class ReservationResponse
     {
-        public Guid ReservationId { get; set; }
+        public Guid Id { get; set; }
 
         public DateTime ExpiresAt { get; set; }
 

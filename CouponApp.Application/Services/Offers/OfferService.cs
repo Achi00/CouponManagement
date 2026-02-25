@@ -1,4 +1,5 @@
 ﻿using CouponApp.Application.DTOs.Offers;
+using CouponApp.Application.DTOs.Search;
 using CouponApp.Application.Exceptions;
 using CouponApp.Application.Interfaces;
 using CouponApp.Application.Interfaces.Repositories;
@@ -85,9 +86,9 @@ namespace CouponApp.Application.Services.Offers
         }
 
         // get list of approved offers
-        public async Task<IReadOnlyList<OfferResponse>> GetApprovedAsync(CancellationToken cancellationToken)
+        public async Task<IReadOnlyList<OfferResponse>> GetApprovedAsync(OfferFilterQuery filter, CancellationToken cancellationToken)
         {
-            return await _offerRepository.GetApprovedAsync(cancellationToken);
+            return await _offerRepository.GetApprovedAsync(filter, cancellationToken);
         }
 
         public async Task<IReadOnlyList<OfferResponse>> GetByMerchantAsync(CancellationToken cancellationToken)

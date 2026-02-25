@@ -1,3 +1,4 @@
+using CouponApp.Application.DTOs.Search;
 using CouponApp.Application.Interfaces.Sercives;
 using CouponApp.Application.Interfaces.Sercives.Offer;
 using CouponApp.Web.Models.Home;
@@ -11,7 +12,7 @@ namespace CouponApp.Web.Controllers
     public class HomeController : Controller
     {
         private readonly IOfferQueryService _offerService;
-        private readonly ICategoryService _categoryService;
+        private readonly ICategoryService _categoryService; 
 
         public HomeController(IOfferQueryService offerService, ICategoryService categoryService)
         {
@@ -19,19 +20,17 @@ namespace CouponApp.Web.Controllers
             _categoryService = categoryService;
         }
 
-        public async Task<IActionResult> Index(CancellationToken cancellationToken)
+        public async Task<IActionResult> Index(OfferFilterQuery filter, CancellationToken cancellationToken = default)
         {
-            var offers = await _offerService.GetApprovedAsync(cancellationToken);
+            var offers = await _offerService.GetApprovedAsync(filter, cancellationToken);
             var categories = await _categoryService.GetAllAsync(cancellationToken);
-
-            var offerModel = offers.Adapt<List<OfferCardViewModel>>();
-
             var model = new HomeViewModel
             {
-                Offers = offerModel,
-                Categories = categories
+                Offers = offers.Adapt<List<OfferCardViewModel>>(),
+                Categories = categories,
+                SearchQuery = filter.SearchQuery,
+                SelectedCategoryId = filter.SelectedCategoryId
             };
-
             return View(model);
         }
         [Authorize]
