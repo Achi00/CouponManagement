@@ -19,8 +19,8 @@ namespace CouponApp.Web.Controllers
         private readonly IAuthService _authService;
 
         public AccountController(
-            SignInManager<ApplicationUser> signInManager, 
-            IEmailService emailService, 
+            SignInManager<ApplicationUser> signInManager,
+            IEmailService emailService,
             UserManager<ApplicationUser> userManager,
             IAuthService authService)
         {

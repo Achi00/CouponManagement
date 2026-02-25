@@ -10,7 +10,7 @@ namespace CouponApp.Web.Factories
 
         public CreateOfferViewModelFactory(ICategoryService categoryService)
         {
-            _categoryService = categoryService; 
+            _categoryService = categoryService;
         }
 
         public async Task<CreateOfferViewModel> CreateAsync(CancellationToken cancellationToken)

@@ -12,7 +12,7 @@ namespace CouponApp.Web.Controllers
     public class HomeController : Controller
     {
         private readonly IOfferQueryService _offerService;
-        private readonly ICategoryService _categoryService; 
+        private readonly ICategoryService _categoryService;
 
         public HomeController(IOfferQueryService offerService, ICategoryService categoryService)
         {
