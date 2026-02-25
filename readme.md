@@ -39,6 +39,7 @@ Built with **ASP.NET Core**, **Entity Framework Core**, and **SQL Server** follo
 # System Roles
 
 ## Administrator
+
 - Full system control
 - Manage users and merchants
 - Approve or reject merchant offers
@@ -46,12 +47,14 @@ Built with **ASP.NET Core**, **Entity Framework Core**, and **SQL Server** follo
 - Manage offer categories
 
 ## Merchant
+
 - Create and manage discount offers
 - View offer performance and sales history
 - Edit offers within allowed time window
 - Monitor active and expired offers
 
 ## Customer
+
 - Browse approved offers
 - Reserve coupons
 - Purchase coupons
@@ -62,6 +65,7 @@ Built with **ASP.NET Core**, **Entity Framework Core**, and **SQL Server** follo
 # Core Modules
 
 ## Merchant Panel
+
 - Dashboard with statistics for active and expired offers
 - Offer CRUD (title, description, category, image, price, discount price, quantity, expiration)
 - Pending approval workflow
@@ -69,12 +73,14 @@ Built with **ASP.NET Core**, **Entity Framework Core**, and **SQL Server** follo
 - Sales history and coupon buyers
 
 ## Admin Panel
+
 - User management (customers and merchants)
 - Offer moderation (approve / reject with reason)
 - Global system configuration
 - Category management
 
 ## Customer Area
+
 - Browse and search offers
 - Coupon reservation system
 - Coupon purchase simulation
@@ -97,9 +103,11 @@ Each offer includes:
 # Background Services
 
 ## Reservation Cleanup
+
 Automatically removes expired reservations if the purchase is not completed within the configured time.
 
 ## Offer Expiration
+
 Updates offer status when the expiration date is reached so they no longer appear in active listings.
 
 ---

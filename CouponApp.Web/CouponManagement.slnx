@@ -12,7 +12,4 @@
   <Folder Name="/Presentation/">
     <Project Path="CouponApp.Web.csproj" />
   </Folder>
-  <Folder Name="/Solution Items/">
-    <File Path="readme.md" />
-  </Folder>
 </Solution>
