@@ -2,9 +2,7 @@
 using CouponApp.Application.Interfaces.Sercives.Auth;
 using CouponApp.Application.Services.Auth;
 using CouponApp.Infrastructure.Auth;
-using CouponApp.Persistence.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using System.Text;

@@ -2,6 +2,7 @@
 using CouponApp.API.Infrastructure.Extensions;
 using CouponApp.API.Infrastructure.Extensions.Auth;
 using CouponApp.API.Middlewares;
+using CouponApp.Persistence.Contexts;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Serilog;
 
@@ -27,6 +28,12 @@ namespace CouponApp.API
             .AddRepositories()
             .AddApplicationServices();
 
+            // health checks
+            builder.Services.AddHealthChecks();
+            // for future
+            //builder.Services.AddHealthChecks()
+            //    .AddDbContextCheck<DiscountManagementContext>();
+
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Information()
                 .Enrich.FromLogContext()
@@ -43,9 +50,11 @@ namespace CouponApp.API
             app.UseMiddleware<ApiExceptionMiddleware>();
             app.UseHttpsRedirection();
             app.UseRouting();
+            app.UseRateLimiterConfiguration();
             app.UseAuthorization();
-            app.MapControllers();
+            app.MapControllers().RequireRateLimiting("api");
             app.UseSerilogRequestLogging();
+            app.MapHealthChecks("/health");
 
             app.Run();
         }

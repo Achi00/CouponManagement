@@ -13,4 +13,7 @@
     <Project Path="../CouponApp.API/CouponApp.API.csproj" Id="98071bbf-6b45-4fd1-8aaf-fc62bfe8513c" />
     <Project Path="CouponApp.Web.csproj" />
   </Folder>
+  <Folder Name="/Tests/">
+    <Project Path="../CouponApp.Test/CouponApp.Test.csproj" Id="57f86142-f1ae-4315-ab7d-fd4d8008d04b" />
+  </Folder>
 </Solution>
