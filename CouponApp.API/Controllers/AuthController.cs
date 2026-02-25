@@ -1,6 +1,6 @@
 ﻿using CouponApp.Application.Interfaces.JWT;
 using CouponApp.Persistence.Identity;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
@@ -9,6 +9,7 @@ namespace CouponApp.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [AllowAnonymous]
     public class AuthController : ControllerBase
     {
         private readonly UserManager<ApplicationUser> _userManager;

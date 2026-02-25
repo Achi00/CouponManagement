@@ -1,0 +1,27 @@
+﻿using CouponApp.Application.Interfaces.Sercives;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+
+namespace CouponApp.API.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    [ResponseCache(Duration = 60)]
+    public class CategoriesController : ControllerBase
+    {
+        private readonly ICategoryService _categoryService;
+
+        public CategoriesController(ICategoryService categoryService)
+        {
+            _categoryService = categoryService;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Get(CancellationToken ct)
+        {
+            var categories = await _categoryService.GetAllAsync(ct);
+
+            return Ok(categories);
+        }
+    }
+}

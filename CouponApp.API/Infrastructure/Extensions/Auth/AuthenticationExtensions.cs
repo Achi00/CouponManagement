@@ -1,11 +1,12 @@
-﻿using CouponApp.Application.Interfaces.Sercives.Auth;
+﻿using CouponApp.API.Security;
+using CouponApp.Application.Interfaces.Sercives.Auth;
 using CouponApp.Application.Services.Auth;
 using CouponApp.Infrastructure.Auth;
 using CouponApp.Persistence.Identity;
-using CouponApp.API.Security;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
+using System.Security.Claims;
 using System.Text;
 using System.Text.Json;
 
@@ -27,6 +28,8 @@ namespace CouponApp.API.Infrastructure.Extensions.Auth
                 .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
+                    options.MapInboundClaims = false;
+
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuer = true,
@@ -39,7 +42,9 @@ namespace CouponApp.API.Infrastructure.Extensions.Auth
 
                         IssuerSigningKey = new SymmetricSecurityKey(
                             Encoding.UTF8.GetBytes(jwt["Key"]!)
-                        )
+                        ),
+                        NameClaimType = ClaimTypes.NameIdentifier,
+                        RoleClaimType = ClaimTypes.Role
                     };
 
                     options.Events = new JwtBearerEvents
